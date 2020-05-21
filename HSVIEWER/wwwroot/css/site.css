@@ -1,0 +1,96 @@
+﻿
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+    position: relative;
+    min-height: 100%;
+    font-family: 'Noto Sans HK', sans-serif;
+    font-family: 'Space Mono', monospace;
+}
+
+body {
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+    background-color: #1E222D;
+    color:#fff;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px; /* Vertically center the text there */
+}
+
+#sales-body {
+    height: 100vh;
+    background-color: #1E222D;
+}
+
+    #sales-body h1 {
+        text-transform: uppercase;
+        color: #01AA8B
+    }
+
+    #sales-body p {
+        color: white;
+    }
+
+    #sales-body input, #sales-body button {
+        border-radius: 0 !important;
+        height: 50px
+    }
+
+    #sales-body button {
+        background-color: #01AA8B;
+        color: white;
+        text-transform: uppercase;
+    }
+
+.centered-col {
+    margin-top: 90px;
+}
+
+
+.bar-container {
+    background-color: #2f343f;
+    height: 20px;
+    width: 100%;
+    margin-top: 60px;
+    margin-bottom: 80px;
+}
+
+.bar-green {
+    background-color: #01AA8B;
+    height: 20px;
+
+}
+
+h1 {
+    text-align: center;
+    margin-top: 100px;
+    font-family: 'Noto Sans HK', sans-serif;
+    color: #01AA8B;
+    font-weight:900;
+    font-size:48px;
+}
+
+
+
+h6 {
+    min-height: 60px;
+    font-size: 14px;
+    text-align: center;
+}
+p {
+    font-family: 'Space Mono', monospace;
+    color: #01AA8B;
+    font-size: 12px;
+    text-align:center;
+}
+
+
+.carousel-item {
+    height: 100vh;
+}
