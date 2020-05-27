@@ -8,25 +8,24 @@ using Microsoft.EntityFrameworkCore;
 using Entities.Models;
 using HSVIEWER.Data;
 
-namespace HSVIEWER.Controllers
+namespace HSVIEWER.Views
 {
-    public class WorkOrdersController : Controller
+    public class StagesController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public WorkOrdersController(ApplicationDbContext context)
+        public StagesController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: WorkOrders
+        // GET: Stages
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.WorkOrder.Include(w => w.Owner);
-            return View(await applicationDbContext.ToListAsync());
+            return View(await _context.Stages.ToListAsync());
         }
 
-        // GET: WorkOrders/Details/5
+        // GET: Stages/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,44 +33,39 @@ namespace HSVIEWER.Controllers
                 return NotFound();
             }
 
-            var workOrder = await _context.WorkOrder
-                .Include(w => w.Owner)
-                .FirstOrDefaultAsync(m => m.WorkOrderId == id);
-            if (workOrder == null)
+            var stage = await _context.Stages
+                .FirstOrDefaultAsync(m => m.StageId == id);
+            if (stage == null)
             {
                 return NotFound();
             }
 
-            return View(workOrder);
+            return View(stage);
         }
 
-        // GET: WorkOrders/Create
+        // GET: Stages/Create
         public IActionResult Create()
         {
-            ViewData["OwnerId"] = new SelectList(_context.Owners, "OwnerId", "OwnerId");
             return View();
         }
 
-        // POST: WorkOrders/Create
+        // POST: Stages/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("WorkOrderId,WorkOrderDate,OwnerId")] WorkOrder workOrder)
+        public async Task<IActionResult> Create([Bind("StageId,HsStageId,StageName,Pipeline,HsPipelineId,Forecast")] Stage stage)
         {
             if (ModelState.IsValid)
             {
-                workOrder.WorkOrderDate = DateTime.Now;
-                _context.Add(workOrder);
-
+                _context.Add(stage);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["OwnerId"] = new SelectList(_context.Owners, "OwnerId", "OwnerId", workOrder.OwnerId);
-            return View(workOrder);
+            return View(stage);
         }
 
-        // GET: WorkOrders/Edit/5
+        // GET: Stages/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -79,23 +73,22 @@ namespace HSVIEWER.Controllers
                 return NotFound();
             }
 
-            var workOrder = await _context.WorkOrder.FindAsync(id);
-            if (workOrder == null)
+            var stage = await _context.Stages.FindAsync(id);
+            if (stage == null)
             {
                 return NotFound();
             }
-            ViewData["OwnerId"] = new SelectList(_context.Owners, "OwnerId", "OwnerId", workOrder.OwnerId);
-            return View(workOrder);
+            return View(stage);
         }
 
-        // POST: WorkOrders/Edit/5
+        // POST: Stages/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("WorkOrderId,WorkOrderDate,OwnerId")] WorkOrder workOrder)
+        public async Task<IActionResult> Edit(int id, [Bind("StageId,HsStageId,StageName,Pipeline,HsPipelineId,Forecast")] Stage stage)
         {
-            if (id != workOrder.WorkOrderId)
+            if (id != stage.StageId)
             {
                 return NotFound();
             }
@@ -104,12 +97,12 @@ namespace HSVIEWER.Controllers
             {
                 try
                 {
-                    _context.Update(workOrder);
+                    _context.Update(stage);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!WorkOrderExists(workOrder.WorkOrderId))
+                    if (!StageExists(stage.StageId))
                     {
                         return NotFound();
                     }
@@ -120,11 +113,10 @@ namespace HSVIEWER.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["OwnerId"] = new SelectList(_context.Owners, "OwnerId", "OwnerId", workOrder.OwnerId);
-            return View(workOrder);
+            return View(stage);
         }
 
-        // GET: WorkOrders/Delete/5
+        // GET: Stages/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -132,31 +124,30 @@ namespace HSVIEWER.Controllers
                 return NotFound();
             }
 
-            var workOrder = await _context.WorkOrder
-                .Include(w => w.Owner)
-                .FirstOrDefaultAsync(m => m.WorkOrderId == id);
-            if (workOrder == null)
+            var stage = await _context.Stages
+                .FirstOrDefaultAsync(m => m.StageId == id);
+            if (stage == null)
             {
                 return NotFound();
             }
 
-            return View(workOrder);
+            return View(stage);
         }
 
-        // POST: WorkOrders/Delete/5
+        // POST: Stages/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var workOrder = await _context.WorkOrder.FindAsync(id);
-            _context.WorkOrder.Remove(workOrder);
+            var stage = await _context.Stages.FindAsync(id);
+            _context.Stages.Remove(stage);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool WorkOrderExists(int id)
+        private bool StageExists(int id)
         {
-            return _context.WorkOrder.Any(e => e.WorkOrderId == id);
+            return _context.Stages.Any(e => e.StageId == id);
         }
     }
 }

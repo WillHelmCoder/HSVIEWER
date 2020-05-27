@@ -44,33 +44,23 @@ namespace HSVIEWER.Controllers
         }
 
         // GET: Owners/Create
-        public IActionResult Create(string message)
+        public IActionResult Create()
         {
-            ViewBag.message = message;
             return View();
         }
 
         // POST: Owners/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("OwnerId,Token,Email,SalesGoal")] Owner owner)
+        public async Task<IActionResult> Create([Bind("OwnerId,Token,Email,SalesGoal,CreationDate,LastUpdate,Isprocessing")] Owner owner)
         {
-                    
-                      
-
             if (ModelState.IsValid)
             {
-                owner.LastUpdate = DateTime.Now;
-                owner.CreationDate = DateTime.Now;
-                owner.Isprocessing = true;
-                
                 _context.Add(owner);
-                
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "workorders", new { mail = owner.Email });
-                //return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));
             }
             return View(owner);
         }
@@ -92,8 +82,8 @@ namespace HSVIEWER.Controllers
         }
 
         // POST: Owners/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("OwnerId,Token,Email,SalesGoal,CreationDate,LastUpdate,Isprocessing")] Owner owner)

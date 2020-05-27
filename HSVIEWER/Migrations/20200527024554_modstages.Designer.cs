@@ -4,14 +4,16 @@ using HSVIEWER.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HSVIEWER.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200527024554_modstages")]
+    partial class modstages
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -139,6 +141,9 @@ namespace HSVIEWER.Migrations
                     b.Property<string>("Pipeline")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("PipelineId")
+                        .HasColumnType("int");
+
                     b.Property<string>("StageName")
                         .HasColumnType("nvarchar(max)");
 
@@ -146,6 +151,8 @@ namespace HSVIEWER.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("StageId");
+
+                    b.HasIndex("PipelineId");
 
                     b.HasIndex("WorkOrderId");
 
@@ -379,6 +386,12 @@ namespace HSVIEWER.Migrations
 
             modelBuilder.Entity("Entities.Models.Stage", b =>
                 {
+                    b.HasOne("Entities.Models.Pipeline", "Pipelines")
+                        .WithMany()
+                        .HasForeignKey("PipelineId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Entities.Models.WorkOrder", null)
                         .WithMany("Stages")
                         .HasForeignKey("WorkOrderId");

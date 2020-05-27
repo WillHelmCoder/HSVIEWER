@@ -4,14 +4,16 @@ using HSVIEWER.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HSVIEWER.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200526172104_kool")]
+    partial class kool
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,22 +28,21 @@ namespace HSVIEWER.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Amount")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("HsOwnerId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("HsStageId")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<double>("Amount")
+                        .HasColumnType("float");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("hsdate")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("OwnerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StageId")
+                        .HasColumnType("int");
 
                     b.HasKey("DealId");
+
+                    b.HasIndex("StageId");
 
                     b.ToTable("Deals");
                 });
@@ -99,13 +100,10 @@ namespace HSVIEWER.Migrations
 
             modelBuilder.Entity("Entities.Models.Pipeline", b =>
                 {
-                    b.Property<int>("PipelineId")
+                    b.Property<int>("PipeLineId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("HsPipeLineId")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -113,7 +111,7 @@ namespace HSVIEWER.Migrations
                     b.Property<int>("WorkOrderId")
                         .HasColumnType("int");
 
-                    b.HasKey("PipelineId");
+                    b.HasKey("PipeLineId");
 
                     b.HasIndex("WorkOrderId");
 
@@ -130,14 +128,17 @@ namespace HSVIEWER.Migrations
                     b.Property<float>("Forecast")
                         .HasColumnType("real");
 
-                    b.Property<string>("HsPipelineId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("HsStageId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Pipeline")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PipelineId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PipelinesPipeLineId")
+                        .HasColumnType("int");
 
                     b.Property<string>("StageName")
                         .HasColumnType("nvarchar(max)");
@@ -146,6 +147,8 @@ namespace HSVIEWER.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("StageId");
+
+                    b.HasIndex("PipelinesPipeLineId");
 
                     b.HasIndex("WorkOrderId");
 
@@ -368,6 +371,15 @@ namespace HSVIEWER.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("Entities.Models.Deal", b =>
+                {
+                    b.HasOne("Entities.Models.Stage", "Stage")
+                        .WithMany()
+                        .HasForeignKey("StageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Entities.Models.Pipeline", b =>
                 {
                     b.HasOne("Entities.Models.WorkOrder", "WorkOrder")
@@ -379,6 +391,10 @@ namespace HSVIEWER.Migrations
 
             modelBuilder.Entity("Entities.Models.Stage", b =>
                 {
+                    b.HasOne("Entities.Models.Pipeline", "Pipelines")
+                        .WithMany()
+                        .HasForeignKey("PipelinesPipeLineId");
+
                     b.HasOne("Entities.Models.WorkOrder", null)
                         .WithMany("Stages")
                         .HasForeignKey("WorkOrderId");

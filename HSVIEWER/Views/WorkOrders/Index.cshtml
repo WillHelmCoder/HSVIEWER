@@ -4,153 +4,38 @@
     ViewData["Title"] = "Index";
 }
 
+<h1>Index</h1>
 
-
-@{
-    string mail = "";
-    float goal = 0;
-    float accumulated = 0;
-    Boolean isProcesing = false;
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.WorkOrderDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Owner)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.WorkOrderDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Owner.OwnerId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.WorkOrderId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.WorkOrderId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.WorkOrderId">Delete</a>
+            </td>
+        </tr>
 }
-
-@foreach (var item in Model)
-{
-
-    mail = item.Owner.Email;
-    goal = Int32.Parse(item.Owner.SalesGoal);
-    isProcesing = item.Owner.Isprocessing;
-
-}
-
-
-@if (ViewBag.isProcessing == true)
-{
-    <div class="container text-center">
-        <h1>Welcome @mail</h1>
-        <img src="~/source.gif" class="img-fluid" />
-        <p>We are processing your data, we will send you an eMail with the access link to your eMail or wait on this screen until we finish</p>
-
-    </div>
-   
-}
-else
-{
-
-    <p>WELCOME @mail</p>
-    <h1>GOAL OF THE YEAR</h1>
-
-
-
-    <input type="hidden" id="goal" value="@ViewBag.goal" />
-    <input type="hidden" id="mail" value="@ViewBag.mail" />
-
-
-    <div class="container-fluid">
-        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-            <div class="carousel-inner" id="carousel-inner">
-            </div>
-            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a>
-        </div>
-    </div>
-
-
-
-
-    <p id="GetCases">GetCases</p>
-}
-
-
-@section Scripts {
-    <script>
-        $(document).ready(function () {
-            GetData();
-        });
-
-
-
-        $.date = function (dateObject) {
-            var d = new Date(dateObject);
-            var day = d.getDate();
-            var month = d.getMonth() + 1;
-            var year = d.getFullYear();
-            if (day < 10) {
-                day = "0" + day;
-            }
-            if (month < 10) {
-                month = "0" + month;
-            }
-            var date = day + "/" + month + "/" + year;
-
-            return date;
-        };
-
-
-        function GetData() {
-
-            $.ajax({
-                url: "/WorkOrders/HsApi?email=" + $('#mail').val(),
-                type: "GET",
-                contentType: "application/json; charset=utf-8",
-                data: "{}",
-                dataType: "json",
-                success: function (data) {
-                    var row = "";
-                    var columns = "";
-                    var idCol = "";
-                    var wonAmount = "";
-                    var goal = $('#goal').val();
-                    $.each(data, function (index, item) {
-
-                        row += '<div class="carousel-item text-white"><div class="col-12"><p class="datelabel">' + $.date(item.workOrderDate) + '</p><div class="bar-container"><div class="bar-green" id=green' + item.workOrderId + '></div> </div> <div id="column' + item.workOrderId + '" class="row"></div> <row><div class="col-md-4 col-lg-1 col-xl-1 col-sm-6"></div></row></div> </div>'
-
-                    });
-                    $("#carousel-inner").html(row);
-
-
-
-
-
-                    $.each(data, function (index, items) {
-                        $.each(items.stages, function (index, item) {
-                            columns += '<div class="col-md-2 col-lg-2 col-xl-2 col-sm-6"><h6>' + item.stageName + '</h6><p>Deals:' + item.totalDealCount + '</p><p>$' + item.totalDealsAmount + '</p></div>';
-                            $('#column' + items.workOrderId).html(columns);
-                            // alert(item.stageId);
-                            if (item.status == true) {
-                                wonAmount = item.totalDealsAmount;
-                            }
-
-                            $('#green' + item.workOrderId).width((wonAmount * 100) / goal + '%');
-
-                            // alert(wonAmount);
-                            // alert((wonAmount * 100) / goal + '%');
-                        });
-                    });
-
-                    $('.carousel-item').first().addClass('active');
-                    $('.carousel-indicators > li').first().addClass('active');
-                },
-                error: function (result) {
-                    alert("Error");
-                }
-            });
-        }
-        $('#GetCases').click(function () {
-            GetData();
-        });
-
-        setTimeout(function () {
-            window.location.reload(1);
-        }, 18000);
-
-    </script>
-
-
-
-}
+    </tbody>
+</table>

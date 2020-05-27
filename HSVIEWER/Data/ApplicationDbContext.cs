@@ -18,6 +18,10 @@ namespace HSVIEWER.Data
 
         public DbSet<Owner> Owners { get; set; }
         public DbSet<Stage> Stages { get; set; }
+
+        public DbSet<Deal> Deals { get; set; }
+        public DbSet<HsOwner> HsOwners { get; set; }
+        public DbSet<Pipeline> Pipelines { get; set; }
         public DbSet<Entities.Models.WorkOrder> WorkOrder { get; set; }
     }
 }

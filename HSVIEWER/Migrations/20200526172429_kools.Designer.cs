@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HSVIEWER.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200209212634_isWon3")]
-    partial class isWon3
+    [Migration("20200526172429_kools")]
+    partial class kools
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,53 @@ namespace HSVIEWER.Migrations
                 .HasAnnotation("ProductVersion", "3.1.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Entities.Models.Deal", b =>
+                {
+                    b.Property<int>("DealId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<double>("Amount")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OwnerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StageId")
+                        .HasColumnType("int");
+
+                    b.HasKey("DealId");
+
+                    b.HasIndex("StageId");
+
+                    b.ToTable("Deals");
+                });
+
+            modelBuilder.Entity("Entities.Models.HsOwner", b =>
+                {
+                    b.Property<int>("HsOwnerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WorkOrderId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("eMail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("HsOwnerId");
+
+                    b.ToTable("HsOwners");
+                });
 
             modelBuilder.Entity("Entities.Models.Owner", b =>
                 {
@@ -51,6 +98,29 @@ namespace HSVIEWER.Migrations
                     b.ToTable("Owners");
                 });
 
+            modelBuilder.Entity("Entities.Models.Pipeline", b =>
+                {
+                    b.Property<int>("PipeLineId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("HsPipeLineId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("WorkOrderId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PipeLineId");
+
+                    b.HasIndex("WorkOrderId");
+
+                    b.ToTable("Pipelines");
+                });
+
             modelBuilder.Entity("Entities.Models.Stage", b =>
                 {
                     b.Property<int>("StageId")
@@ -58,31 +128,30 @@ namespace HSVIEWER.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                    b.Property<float>("Forecast")
+                        .HasColumnType("real");
 
-                    b.Property<string>("IdHsStage")
+                    b.Property<string>("HsStageId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("Percentage")
-                        .HasColumnType("real");
+                    b.Property<string>("Pipeline")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PipelineId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PipelinesPipeLineId")
+                        .HasColumnType("int");
 
                     b.Property<string>("StageName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TotalDealCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TotalDealsAmount")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("WorkOrderId")
+                    b.Property<int?>("WorkOrderId")
                         .HasColumnType("int");
 
                     b.HasKey("StageId");
+
+                    b.HasIndex("PipelinesPipeLineId");
 
                     b.HasIndex("WorkOrderId");
 
@@ -305,13 +374,33 @@ namespace HSVIEWER.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Entities.Models.Stage", b =>
+            modelBuilder.Entity("Entities.Models.Deal", b =>
+                {
+                    b.HasOne("Entities.Models.Stage", "Stage")
+                        .WithMany()
+                        .HasForeignKey("StageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Entities.Models.Pipeline", b =>
                 {
                     b.HasOne("Entities.Models.WorkOrder", "WorkOrder")
-                        .WithMany("Stages")
+                        .WithMany()
                         .HasForeignKey("WorkOrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Entities.Models.Stage", b =>
+                {
+                    b.HasOne("Entities.Models.Pipeline", "Pipelines")
+                        .WithMany()
+                        .HasForeignKey("PipelinesPipeLineId");
+
+                    b.HasOne("Entities.Models.WorkOrder", null)
+                        .WithMany("Stages")
+                        .HasForeignKey("WorkOrderId");
                 });
 
             modelBuilder.Entity("Entities.Models.WorkOrder", b =>

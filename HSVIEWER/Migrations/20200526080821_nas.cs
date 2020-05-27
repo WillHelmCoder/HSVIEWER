@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace HSVIEWER.Migrations
 {
-    public partial class isWon3 : Migration
+    public partial class nas : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -44,6 +44,21 @@ namespace HSVIEWER.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "HsOwners",
+                columns: table => new
+                {
+                    HsOwnerId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    eMail = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    WorkOrderId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HsOwners", x => x.HsOwnerId);
                 });
 
             migrationBuilder.CreateTable(
@@ -182,12 +197,14 @@ namespace HSVIEWER.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_WorkOrder", x => x.WorkOrderId);
+                   
                     table.ForeignKey(
                         name: "FK_WorkOrder_Owners_OwnerId",
                         column: x => x.OwnerId,
                         principalTable: "Owners",
                         principalColumn: "OwnerId",
-                        onDelete: ReferentialAction.Cascade);
+                        
+                onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -196,14 +213,12 @@ namespace HSVIEWER.Migrations
                 {
                     StageId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    HsStageId = table.Column<string>(nullable: true),
                     StageName = table.Column<string>(nullable: true),
-                    IdHsStage = table.Column<string>(nullable: true),
-                    Date = table.Column<DateTime>(nullable: false),
-                    TotalDealCount = table.Column<int>(nullable: false),
-                    TotalDealsAmount = table.Column<string>(nullable: true),
+                    Pipeline = table.Column<string>(nullable: true),
+                    PipelineId = table.Column<string>(nullable: true),
                     WorkOrderId = table.Column<int>(nullable: false),
-                    Percentage = table.Column<float>(nullable: false),
-                    Status = table.Column<int>(nullable: false)
+                    Forecast = table.Column<float>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -213,6 +228,28 @@ namespace HSVIEWER.Migrations
                         column: x => x.WorkOrderId,
                         principalTable: "WorkOrder",
                         principalColumn: "WorkOrderId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Deals",
+                columns: table => new
+                {
+                    DealId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Amount = table.Column<double>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    StageId = table.Column<int>(nullable: false),
+                    OwnerId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Deals", x => x.DealId);
+                    table.ForeignKey(
+                        name: "FK_Deals_Stages_StageId",
+                        column: x => x.StageId,
+                        principalTable: "Stages",
+                        principalColumn: "StageId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -256,6 +293,11 @@ namespace HSVIEWER.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Deals_StageId",
+                table: "Deals",
+                column: "StageId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Stages_WorkOrderId",
                 table: "Stages",
                 column: "WorkOrderId");
@@ -264,6 +306,8 @@ namespace HSVIEWER.Migrations
                 name: "IX_WorkOrder_OwnerId",
                 table: "WorkOrder",
                 column: "OwnerId");
+
+           
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -284,13 +328,19 @@ namespace HSVIEWER.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Stages");
+                name: "Deals");
+
+            migrationBuilder.DropTable(
+                name: "HsOwners");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Stages");
 
             migrationBuilder.DropTable(
                 name: "WorkOrder");

@@ -8,25 +8,25 @@ using Microsoft.EntityFrameworkCore;
 using Entities.Models;
 using HSVIEWER.Data;
 
-namespace HSVIEWER.Controllers
+namespace HSVIEWER.Views
 {
-    public class WorkOrdersController : Controller
+    public class PipelinesController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public WorkOrdersController(ApplicationDbContext context)
+        public PipelinesController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: WorkOrders
+        // GET: Pipelines
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.WorkOrder.Include(w => w.Owner);
+            var applicationDbContext = _context.Pipelines.Include(p => p.WorkOrder);
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: WorkOrders/Details/5
+        // GET: Pipelines/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,44 +34,42 @@ namespace HSVIEWER.Controllers
                 return NotFound();
             }
 
-            var workOrder = await _context.WorkOrder
-                .Include(w => w.Owner)
-                .FirstOrDefaultAsync(m => m.WorkOrderId == id);
-            if (workOrder == null)
+            var pipeline = await _context.Pipelines
+                .Include(p => p.WorkOrder)
+                .FirstOrDefaultAsync(m => m.PipelineId == id);
+            if (pipeline == null)
             {
                 return NotFound();
             }
 
-            return View(workOrder);
+            return View(pipeline);
         }
 
-        // GET: WorkOrders/Create
+        // GET: Pipelines/Create
         public IActionResult Create()
         {
-            ViewData["OwnerId"] = new SelectList(_context.Owners, "OwnerId", "OwnerId");
+            ViewData["WorkOrderId"] = new SelectList(_context.WorkOrder, "WorkOrderId", "WorkOrderId");
             return View();
         }
 
-        // POST: WorkOrders/Create
+        // POST: Pipelines/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("WorkOrderId,WorkOrderDate,OwnerId")] WorkOrder workOrder)
+        public async Task<IActionResult> Create([Bind("PipelineId,Name,WorkOrderId,HsPipeLineId")] Pipeline pipeline)
         {
             if (ModelState.IsValid)
             {
-                workOrder.WorkOrderDate = DateTime.Now;
-                _context.Add(workOrder);
-
+                _context.Add(pipeline);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["OwnerId"] = new SelectList(_context.Owners, "OwnerId", "OwnerId", workOrder.OwnerId);
-            return View(workOrder);
+            ViewData["WorkOrderId"] = new SelectList(_context.WorkOrder, "WorkOrderId", "WorkOrderId", pipeline.WorkOrderId);
+            return View(pipeline);
         }
 
-        // GET: WorkOrders/Edit/5
+        // GET: Pipelines/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -79,23 +77,23 @@ namespace HSVIEWER.Controllers
                 return NotFound();
             }
 
-            var workOrder = await _context.WorkOrder.FindAsync(id);
-            if (workOrder == null)
+            var pipeline = await _context.Pipelines.FindAsync(id);
+            if (pipeline == null)
             {
                 return NotFound();
             }
-            ViewData["OwnerId"] = new SelectList(_context.Owners, "OwnerId", "OwnerId", workOrder.OwnerId);
-            return View(workOrder);
+            ViewData["WorkOrderId"] = new SelectList(_context.WorkOrder, "WorkOrderId", "WorkOrderId", pipeline.WorkOrderId);
+            return View(pipeline);
         }
 
-        // POST: WorkOrders/Edit/5
+        // POST: Pipelines/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("WorkOrderId,WorkOrderDate,OwnerId")] WorkOrder workOrder)
+        public async Task<IActionResult> Edit(int id, [Bind("PipelineId,Name,WorkOrderId,HsPipeLineId")] Pipeline pipeline)
         {
-            if (id != workOrder.WorkOrderId)
+            if (id != pipeline.PipelineId)
             {
                 return NotFound();
             }
@@ -104,12 +102,12 @@ namespace HSVIEWER.Controllers
             {
                 try
                 {
-                    _context.Update(workOrder);
+                    _context.Update(pipeline);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!WorkOrderExists(workOrder.WorkOrderId))
+                    if (!PipelineExists(pipeline.PipelineId))
                     {
                         return NotFound();
                     }
@@ -120,11 +118,11 @@ namespace HSVIEWER.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["OwnerId"] = new SelectList(_context.Owners, "OwnerId", "OwnerId", workOrder.OwnerId);
-            return View(workOrder);
+            ViewData["WorkOrderId"] = new SelectList(_context.WorkOrder, "WorkOrderId", "WorkOrderId", pipeline.WorkOrderId);
+            return View(pipeline);
         }
 
-        // GET: WorkOrders/Delete/5
+        // GET: Pipelines/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -132,31 +130,31 @@ namespace HSVIEWER.Controllers
                 return NotFound();
             }
 
-            var workOrder = await _context.WorkOrder
-                .Include(w => w.Owner)
-                .FirstOrDefaultAsync(m => m.WorkOrderId == id);
-            if (workOrder == null)
+            var pipeline = await _context.Pipelines
+                .Include(p => p.WorkOrder)
+                .FirstOrDefaultAsync(m => m.PipelineId == id);
+            if (pipeline == null)
             {
                 return NotFound();
             }
 
-            return View(workOrder);
+            return View(pipeline);
         }
 
-        // POST: WorkOrders/Delete/5
+        // POST: Pipelines/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var workOrder = await _context.WorkOrder.FindAsync(id);
-            _context.WorkOrder.Remove(workOrder);
+            var pipeline = await _context.Pipelines.FindAsync(id);
+            _context.Pipelines.Remove(pipeline);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool WorkOrderExists(int id)
+        private bool PipelineExists(int id)
         {
-            return _context.WorkOrder.Any(e => e.WorkOrderId == id);
+            return _context.Pipelines.Any(e => e.PipelineId == id);
         }
     }
 }

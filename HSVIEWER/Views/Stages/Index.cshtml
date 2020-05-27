@@ -1,0 +1,59 @@
+﻿@model IEnumerable<Entities.Models.Stage>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.HsStageId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StageName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pipeline)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HsPipelineId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Forecast)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.HsStageId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StageName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Pipeline)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HsPipelineId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Forecast)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.StageId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.StageId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.StageId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
