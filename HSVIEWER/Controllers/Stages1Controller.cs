@@ -29,7 +29,7 @@ namespace HSVIEWER.Controllers
 
                 var deals = await _context.Deals.Where(w => w.HsStageId == item.HsStageId).ToListAsync();
                 var totalDeals = deals.Count();
-                var suma = deals.Sum(x=>x.Amount);
+                var suma = deals.Sum(x=> float.Parse(x.Amount));
                 var average = suma / totalDeals;
 
               //  model.Add(new StagesAnalysis { DealsNumber= totalDeals, StageValue=suma, DealAverage= average, Stagename=item.StageName });
