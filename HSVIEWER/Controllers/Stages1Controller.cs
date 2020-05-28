@@ -39,11 +39,11 @@ namespace HSVIEWER.Controllers
 
                 throw;
             }
-            
+        }
 
-            
-
-            return RedirectToAction("Index", "Onwneranalysis"); 
+        public async Task<IActionResult> GetGraphInfo()
+        {
+            var wo = _mainService.GetAllWorkOrders();
         }
 
         // GET: Stages1/Details/5

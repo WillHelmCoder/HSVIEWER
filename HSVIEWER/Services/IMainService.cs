@@ -12,7 +12,9 @@ namespace HSVIEWER.Services
         Task<List<Deal>> GetDealsInStage(string stage);
         Task SaveStageAnalysis(string pipe);
         Task SaveOwnerAnalysis(int workOrderId);
-        
+        Task<List<WorkOrder>> GetAllWorkOrders();
+
+
 
 
     }
