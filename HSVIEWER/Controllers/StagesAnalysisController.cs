@@ -13,16 +13,27 @@ namespace HSVIEWER.Controllers
     public class StagesAnalysisController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly 
 
         public StagesAnalysisController(ApplicationDbContext context)
         {
+
             _context = context;
         }
 
         // GET: StagesAnalysis
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string Id)
         {
+            var isProcessed = await _context.StagesAnalysis.Where(w=>w.Stagename==Id).SingleOrDefaultAsync();
+            if (isProcessed.StagesAnalysisId!=0) {
+                return View(await _context.StagesAnalysis.ToListAsync());
+            }
+            else
+            {
+                
+            }
             return View(await _context.StagesAnalysis.ToListAsync());
+
         }
 
         // GET: StagesAnalysis/Details/5

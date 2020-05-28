@@ -36,6 +36,13 @@ namespace HSVIEWER.Services
             await _context.SaveChangesAsync();
         }
 
+       
+
+
+
+
+
+
         public async Task<List<Stage>> GetAllStages(string pipeline)
         {
             return await _context.Stages.Where(x => x.HsPipelineId.Equals(pipeline)).ToListAsync();
@@ -45,6 +52,10 @@ namespace HSVIEWER.Services
         {
             return await _context.Deals.Where(x => x.HsStageId.Equals(stage)).ToListAsync();
         }
+
+
+       
+
 
     }
 }
