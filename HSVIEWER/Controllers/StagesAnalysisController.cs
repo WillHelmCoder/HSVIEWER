@@ -14,9 +14,9 @@ namespace HSVIEWER.Controllers
     public class StagesAnalysisController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly MainService _mainService;
+        private readonly IMainService _mainService;
 
-        public StagesAnalysisController(ApplicationDbContext context, MainService mainService)
+        public StagesAnalysisController(ApplicationDbContext context, IMainService mainService)
         {
 
             _context = context;
@@ -26,9 +26,9 @@ namespace HSVIEWER.Controllers
         // GET: StagesAnalysis
         public async Task<IActionResult> Index(string Id)
         {
-            var isProcessed = await _context.StagesAnalysis.Where(w=>w.PipelineId==Id).SingleOrDefaultAsync();
+            Int32 isProcessed = await _context.StagesAnalysis.Where(w => w.PipelineId == Id).CountAsync();
 
-            if (isProcessed.StagesAnalysisId!=0) {
+            if (isProcessed!=0) {
                 return View(await _context.StagesAnalysis.ToListAsync());
             }
             else

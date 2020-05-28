@@ -28,7 +28,7 @@ namespace HSVIEWER.Services
                 long suma = deals.Sum(x => long.Parse(x.Amount));
                 var average = suma / totalDeals;
 
-                var newStageAnalysis = new StagesAnalysis { DealsNumber = totalDeals, StageValue = suma, DealAverage = average, Stagename = item.StageName };
+                var newStageAnalysis = new StagesAnalysis { DealsNumber = totalDeals, StageValue = suma, DealAverage = average, Stagename = item.StageName, PipelineId=pipe };
                 model.Add(newStageAnalysis);
                 
             }
