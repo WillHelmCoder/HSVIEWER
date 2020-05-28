@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Entities.Models;
 using HSVIEWER.Data;
 
-namespace HSVIEWER.Views
+namespace HSVIEWER.Controllers
 {
     public class StagesController : Controller
     {
@@ -20,9 +20,9 @@ namespace HSVIEWER.Views
         }
 
         // GET: Stages
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string Id)
         {
-            return View(await _context.Stages.ToListAsync());
+            return View(await _context.Stages.Where(w=>w.HsPipelineId== Id).ToListAsync());
         }
 
         // GET: Stages/Details/5

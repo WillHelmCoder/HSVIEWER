@@ -16,8 +16,7 @@ namespace Entities.Models
         public Int32 WorkOrderId { get; set; }
         public DateTime WorkOrderDate { get; set; }
         public Int32 OwnerId { get; set; }
-        public virtual List<Stage> Stages { get; set; }
-       
+        public virtual List<Stage> Stages { get; set; }       
         [JsonIgnore] 
         public virtual Owner Owner { get; set; }
     }

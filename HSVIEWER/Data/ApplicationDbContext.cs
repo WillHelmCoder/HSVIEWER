@@ -18,6 +18,9 @@ namespace HSVIEWER.Data
 
         public DbSet<Owner> Owners { get; set; }
         public DbSet<Stage> Stages { get; set; }
+        public DbSet<StagesAnalysis> StagesAnalysis { get; set; }
+        public DbSet<OwnerAnalysis> OwnerAnalysis { get; set; }
+        public DbSet<OwnerStageAnalysis> OwnerStageAnalysis { get; set; }
 
         public DbSet<Deal> Deals { get; set; }
         public DbSet<HsOwner> HsOwners { get; set; }

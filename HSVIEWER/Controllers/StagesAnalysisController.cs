@@ -8,25 +8,24 @@ using Microsoft.EntityFrameworkCore;
 using Entities.Models;
 using HSVIEWER.Data;
 
-namespace HSVIEWER.Views
+namespace HSVIEWER.Controllers
 {
-    public class PipelinesController : Controller
+    public class StagesAnalysisController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public PipelinesController(ApplicationDbContext context)
+        public StagesAnalysisController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Pipelines
+        // GET: StagesAnalysis
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Pipelines.Include(p => p.WorkOrder);
-            return View(await applicationDbContext.ToListAsync());
+            return View(await _context.StagesAnalysis.ToListAsync());
         }
 
-        // GET: Pipelines/Details/5
+        // GET: StagesAnalysis/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,42 +33,39 @@ namespace HSVIEWER.Views
                 return NotFound();
             }
 
-            var pipeline = await _context.Pipelines
-                .Include(p => p.WorkOrder)
-                .FirstOrDefaultAsync(m => m.PipelineId == id);
-            if (pipeline == null)
+            var stagesAnalysis = await _context.StagesAnalysis
+                .FirstOrDefaultAsync(m => m.StagesAnalysisId == id);
+            if (stagesAnalysis == null)
             {
                 return NotFound();
             }
 
-            return View(pipeline);
+            return View(stagesAnalysis);
         }
 
-        // GET: Pipelines/Create
+        // GET: StagesAnalysis/Create
         public IActionResult Create()
         {
-            ViewData["WorkOrderId"] = new SelectList(_context.WorkOrder, "WorkOrderId", "WorkOrderId");
             return View();
         }
 
-        // POST: Pipelines/Create
+        // POST: StagesAnalysis/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PipelineId,Name,WorkOrderId,HsPipeLineId")] Pipeline pipeline)
+        public async Task<IActionResult> Create([Bind("StagesAnalysisId,Stagename,DealsNumber,DealAverage,StageValue")] StagesAnalysis stagesAnalysis)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(pipeline);
+                _context.Add(stagesAnalysis);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["WorkOrderId"] = new SelectList(_context.WorkOrder, "WorkOrderId", "WorkOrderId", pipeline.WorkOrderId);
-            return View(pipeline);
+            return View(stagesAnalysis);
         }
 
-        // GET: Pipelines/Edit/5
+        // GET: StagesAnalysis/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -77,23 +73,22 @@ namespace HSVIEWER.Views
                 return NotFound();
             }
 
-            var pipeline = await _context.Pipelines.FindAsync(id);
-            if (pipeline == null)
+            var stagesAnalysis = await _context.StagesAnalysis.FindAsync(id);
+            if (stagesAnalysis == null)
             {
                 return NotFound();
             }
-            ViewData["WorkOrderId"] = new SelectList(_context.WorkOrder, "WorkOrderId", "WorkOrderId", pipeline.WorkOrderId);
-            return View(pipeline);
+            return View(stagesAnalysis);
         }
 
-        // POST: Pipelines/Edit/5
+        // POST: StagesAnalysis/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PipelineId,Name,WorkOrderId,HsPipeLineId")] Pipeline pipeline)
+        public async Task<IActionResult> Edit(int id, [Bind("StagesAnalysisId,Stagename,DealsNumber,DealAverage,StageValue")] StagesAnalysis stagesAnalysis)
         {
-            if (id != pipeline.PipelineId)
+            if (id != stagesAnalysis.StagesAnalysisId)
             {
                 return NotFound();
             }
@@ -102,12 +97,12 @@ namespace HSVIEWER.Views
             {
                 try
                 {
-                    _context.Update(pipeline);
+                    _context.Update(stagesAnalysis);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PipelineExists(pipeline.PipelineId))
+                    if (!StagesAnalysisExists(stagesAnalysis.StagesAnalysisId))
                     {
                         return NotFound();
                     }
@@ -118,11 +113,10 @@ namespace HSVIEWER.Views
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["WorkOrderId"] = new SelectList(_context.WorkOrder, "WorkOrderId", "WorkOrderId", pipeline.WorkOrderId);
-            return View(pipeline);
+            return View(stagesAnalysis);
         }
 
-        // GET: Pipelines/Delete/5
+        // GET: StagesAnalysis/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -130,31 +124,30 @@ namespace HSVIEWER.Views
                 return NotFound();
             }
 
-            var pipeline = await _context.Pipelines
-                .Include(p => p.WorkOrder)
-                .FirstOrDefaultAsync(m => m.PipelineId == id);
-            if (pipeline == null)
+            var stagesAnalysis = await _context.StagesAnalysis
+                .FirstOrDefaultAsync(m => m.StagesAnalysisId == id);
+            if (stagesAnalysis == null)
             {
                 return NotFound();
             }
 
-            return View(pipeline);
+            return View(stagesAnalysis);
         }
 
-        // POST: Pipelines/Delete/5
+        // POST: StagesAnalysis/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var pipeline = await _context.Pipelines.FindAsync(id);
-            _context.Pipelines.Remove(pipeline);
+            var stagesAnalysis = await _context.StagesAnalysis.FindAsync(id);
+            _context.StagesAnalysis.Remove(stagesAnalysis);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PipelineExists(int id)
+        private bool StagesAnalysisExists(int id)
         {
-            return _context.Pipelines.Any(e => e.PipelineId == id);
+            return _context.StagesAnalysis.Any(e => e.StagesAnalysisId == id);
         }
     }
 }

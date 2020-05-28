@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Entities.Models.StagesAnalysis>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Stagename)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DealsNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DealAverage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StageValue)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Stagename)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DealsNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DealAverage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StageValue)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.StagesAnalysisId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.StagesAnalysisId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.StagesAnalysisId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

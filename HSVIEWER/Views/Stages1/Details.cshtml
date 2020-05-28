@@ -1,0 +1,48 @@
+﻿@model Entities.Models.Stage
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Stage</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.HsStageId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.HsStageId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.StageName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.StageName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Pipeline)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Pipeline)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.HsPipelineId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.HsPipelineId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Forecast)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Forecast)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.StageId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

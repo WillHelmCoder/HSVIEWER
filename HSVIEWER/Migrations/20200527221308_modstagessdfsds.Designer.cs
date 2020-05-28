@@ -4,14 +4,16 @@ using HSVIEWER.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HSVIEWER.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200527221308_modstagessdfsds")]
+    partial class modstagessdfsds
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,9 +39,6 @@ namespace HSVIEWER.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("WorkOrderId")
-                        .HasColumnType("int");
 
                     b.Property<string>("hsdate")
                         .HasColumnType("nvarchar(max)");
@@ -100,57 +99,6 @@ namespace HSVIEWER.Migrations
                     b.ToTable("Owners");
                 });
 
-            modelBuilder.Entity("Entities.Models.OwnerAnalysis", b =>
-                {
-                    b.Property<int>("OwnerAnalysisId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<double>("DealAverage")
-                        .HasColumnType("float");
-
-                    b.Property<int>("DealsNumber")
-                        .HasColumnType("int");
-
-                    b.Property<string>("OwnerName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("OwnerPipelineValue")
-                        .HasColumnType("float");
-
-                    b.HasKey("OwnerAnalysisId");
-
-                    b.ToTable("OwnerAnalysis");
-                });
-
-            modelBuilder.Entity("Entities.Models.OwnerStageAnalysis", b =>
-                {
-                    b.Property<int>("OwnerStageAnalysisId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<double>("DealAverage")
-                        .HasColumnType("float");
-
-                    b.Property<int>("DealsNumber")
-                        .HasColumnType("int");
-
-                    b.Property<string>("OwnerName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("OwnerPipelineValue")
-                        .HasColumnType("float");
-
-                    b.Property<string>("StageName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("OwnerStageAnalysisId");
-
-                    b.ToTable("OwnerStageAnalysis");
-                });
-
             modelBuilder.Entity("Entities.Models.Pipeline", b =>
                 {
                     b.Property<int>("PipelineId")
@@ -204,30 +152,6 @@ namespace HSVIEWER.Migrations
                     b.HasIndex("WorkOrderId");
 
                     b.ToTable("Stages");
-                });
-
-            modelBuilder.Entity("Entities.Models.StagesAnalysis", b =>
-                {
-                    b.Property<int>("StagesAnalysisId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<double>("DealAverage")
-                        .HasColumnType("float");
-
-                    b.Property<int>("DealsNumber")
-                        .HasColumnType("int");
-
-                    b.Property<double>("StageValue")
-                        .HasColumnType("float");
-
-                    b.Property<string>("Stagename")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("StagesAnalysisId");
-
-                    b.ToTable("StagesAnalysis");
                 });
 
             modelBuilder.Entity("Entities.Models.WorkOrder", b =>

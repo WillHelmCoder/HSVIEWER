@@ -39,7 +39,8 @@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.PipelineId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.PipelineId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.PipelineId">Delete</a>
+                <a asp-action="Delete" asp-route-id="@item.PipelineId">Delete</a>|
+                <a asp-controller="Stages" asp-action="Index" asp-route-id="@item.HsPipeLineId">Stages</a>
             </td>
         </tr>
 }

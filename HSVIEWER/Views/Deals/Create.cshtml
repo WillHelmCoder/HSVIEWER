@@ -1,0 +1,53 @@
+﻿@model Entities.Models.Deal
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Deal</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Amount" class="control-label"></label>
+                <input asp-for="Amount" class="form-control" />
+                <span asp-validation-for="Amount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HsStageId" class="control-label"></label>
+                <input asp-for="HsStageId" class="form-control" />
+                <span asp-validation-for="HsStageId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HsOwnerId" class="control-label"></label>
+                <input asp-for="HsOwnerId" class="form-control" />
+                <span asp-validation-for="HsOwnerId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="hsdate" class="control-label"></label>
+                <input asp-for="hsdate" class="form-control" />
+                <span asp-validation-for="hsdate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

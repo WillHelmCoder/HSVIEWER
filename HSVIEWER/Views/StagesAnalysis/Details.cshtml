@@ -1,0 +1,42 @@
+﻿@model Entities.Models.StagesAnalysis
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>StagesAnalysis</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Stagename)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Stagename)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DealsNumber)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DealsNumber)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DealAverage)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DealAverage)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.StageValue)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.StageValue)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.StagesAnalysisId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
