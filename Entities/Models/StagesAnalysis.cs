@@ -12,5 +12,6 @@ namespace Entities.Models
         public Int32 DealsNumber { get; set; }
         public double DealAverage { get; set; }
         public double StageValue { get; set; }
+        public string PipelineId { get; set; }
     }
 }

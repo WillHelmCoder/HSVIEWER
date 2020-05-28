@@ -7,22 +7,36 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Entities.Models;
 using HSVIEWER.Data;
+using HSVIEWER.Services;
 
 namespace HSVIEWER.Controllers
 {
     public class StagesAnalysisController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMainService _mainService;
 
-        public StagesAnalysisController(ApplicationDbContext context)
+        public StagesAnalysisController(ApplicationDbContext context, IMainService mainService)
         {
+
             _context = context;
+            _mainService = mainService;
         }
 
         // GET: StagesAnalysis
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string Id)
         {
+            Int32 isProcessed = await _context.StagesAnalysis.Where(w => w.PipelineId == Id).CountAsync();
+
+            if (isProcessed!=0) {
+                return View(await _context.StagesAnalysis.ToListAsync());
+            }
+            else
+            {
+                await _mainService.SaveStageAnalysis(Id);
+            }
             return View(await _context.StagesAnalysis.ToListAsync());
+
         }
 
         // GET: StagesAnalysis/Details/5
