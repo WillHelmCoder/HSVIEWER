@@ -25,9 +25,9 @@ namespace HSVIEWER.Controllers
         // GET: Stages1
         public async Task<IActionResult> Index(Int32 WId, string pipe = "1703125")
         {
-            
+           
             await _mainService.SaveStageAnalysis(pipe);
-            
+
             return RedirectToAction("Index", "StageAnalysis"); 
         }
 
