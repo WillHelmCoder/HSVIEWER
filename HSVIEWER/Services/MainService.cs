@@ -25,12 +25,12 @@ namespace HSVIEWER.Services
             {
                 var deals = await GetDealsInStage(item.HsStageId);
                 var totalDeals = deals.Count();
-                var suma = deals.Sum(x => x.Amount);
+                long suma = deals.Sum(x => long.Parse(x.Amount));
                 var average = suma / totalDeals;
 
                 var newStageAnalysis = new StagesAnalysis { DealsNumber = totalDeals, StageValue = suma, DealAverage = average, Stagename = item.StageName };
 
-                _context.StagesAnalysis.Add(newStageAnalysis);
+                await _context.StagesAnalysis.AddAsync(newStageAnalysis);
             }
 
             await _context.SaveChangesAsync();
