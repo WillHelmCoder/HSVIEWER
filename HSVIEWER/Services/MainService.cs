@@ -20,7 +20,7 @@ namespace HSVIEWER.Services
         {
             var model = new List<StagesAnalysis>();
             var allStages = await GetAllStages(pipe);
-
+            
             foreach (var item in allStages)
             {
                 var deals = await GetDealsInStage(item.HsStageId);
@@ -29,19 +29,13 @@ namespace HSVIEWER.Services
                 var average = suma / totalDeals;
 
                 var newStageAnalysis = new StagesAnalysis { DealsNumber = totalDeals, StageValue = suma, DealAverage = average, Stagename = item.StageName };
-
-                await _context.StagesAnalysis.AddAsync(newStageAnalysis);
+                model.Add(newStageAnalysis);
+                
             }
 
+            await _context.StagesAnalysis.AddRangeAsync(model);
             await _context.SaveChangesAsync();
         }
-
-       
-
-
-
-
-
 
         public async Task<List<Stage>> GetAllStages(string pipeline)
         {
@@ -53,9 +47,41 @@ namespace HSVIEWER.Services
             return await _context.Deals.Where(x => x.HsStageId.Equals(stage)).ToListAsync();
         }
 
+        public async Task<List<Deal>> GetDealsInOwner(string owner)
+        {
+            return await _context.Deals.Where(x => x.HsOwnerId.Equals(owner)).ToListAsync();
+        }
 
-       
+        public async Task<List<HsOwner>> GetOwnersWorkOrder(int workOrderId)
+        {
+            return await _context.HsOwners.Where(w => w.WorkOrderId == workOrderId).ToListAsync();
+        }
 
+        public async Task SaveOwnerAnalysis(int workOrderId) {
+            var allOwners = await GetOwnersWorkOrder(workOrderId);
+            var listToInsert = new List<OwnerAnalysis>();
+            foreach (var item in allOwners)
+            {
+                var deals = await GetDealsInOwner(item.HsId);
+                var totalDeals = deals.Count();
+                var suma = deals.Sum(x => float.Parse(x.Amount));
+                var average = 0.0;
+                if (totalDeals == 0 || suma == 0)
+                {
+                    average = suma / totalDeals;
+                }
+                else
+                {
+                    average = 0;
+                }
+
+                listToInsert.Add(new OwnerAnalysis { DealsNumber = totalDeals, OwnerPipelineValue = suma, DealAverage = average, OwnerName = item.Name });
+                
+                
+            }
+            await _context.OwnerAnalysis.AddRangeAsync(listToInsert);
+            await _context.SaveChangesAsync();
+        }
 
     }
 }
