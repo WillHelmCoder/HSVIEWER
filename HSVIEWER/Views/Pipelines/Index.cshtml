@@ -25,24 +25,43 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HsPipeLineId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.WorkOrder.WorkOrderId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.PipelineId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.PipelineId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.PipelineId">Delete</a>|
-                <a asp-controller="Stages" asp-action="Index" asp-route-id="@item.HsPipeLineId">Stages</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HsPipeLineId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.WorkOrder.WorkOrderId)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.PipelineId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.PipelineId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.PipelineId">Delete</a>|
+                    <a asp-controller="StagesAnalysis" asp-action="Index" asp-route-id="@item.HsPipeLineId" id="Analize">Stages</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+
+@section script {
+  
+<script>
+        $(document).ready(function () {
+            $('#Analize').click(function () {
+                $.ajax({
+                    url: '<%= Url.Action("StageAnalyzeAsync", "asyncfn") %>',
+                    success: function (data) {
+                        alert(data);
+                    }
+                }
+            });
+        });
+    </script>  
+
+}
