@@ -18,6 +18,7 @@ using Microsoft.EntityFrameworkCore;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 using Glimpse.AspNet.Tab;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using HSVIEWER.Services;
 
 namespace HSVIEWER
 {
@@ -45,6 +46,7 @@ namespace HSVIEWER
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddScoped(typeof(IMainService), typeof(MainService));
             services.AddRazorPages();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             services.Configure<RazorPagesOptions>(options => options.RootDirectory = "/Views");

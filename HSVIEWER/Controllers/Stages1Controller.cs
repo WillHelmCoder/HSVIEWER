@@ -7,37 +7,27 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Entities.Models;
 using HSVIEWER.Data;
+using HSVIEWER.Services;
 
 namespace HSVIEWER.Controllers
 {
     public class Stages1Controller : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly MainService _mainService;
 
-        public Stages1Controller(ApplicationDbContext context)
+        public Stages1Controller(ApplicationDbContext context, MainService mainService)
         {
             _context = context;
+            _mainService = mainService;
         }
 
         // GET: Stages1
         public async Task<IActionResult> Index(Int32 WId, string pipe = "1703125")
         {
-            var model = new List<StagesAnalysis>();
-            var allStages = await _context.Stages.Where(w => w.HsPipelineId == pipe).ToListAsync();
-
-            foreach (var item in allStages) {
-
-                var deals = await _context.Deals.Where(w => w.HsStageId == item.HsStageId).ToListAsync();
-                var totalDeals = deals.Count();
-                var suma = deals.Sum(x=>x.Amount);
-                var average = suma / totalDeals;
-
-              //  model.Add(new StagesAnalysis { DealsNumber= totalDeals, StageValue=suma, DealAverage= average, Stagename=item.StageName });
-                _context.StagesAnalysis.Add(new StagesAnalysis { DealsNumber = totalDeals, StageValue = suma, DealAverage = average, Stagename = item.StageName });
-                await _context.SaveChangesAsync();
-            }
-         
-
+            
+            await _mainService.SaveStageAnalysis(pipe);
+            
             return RedirectToAction("Index", "StageAnalysis"); 
         }
 
