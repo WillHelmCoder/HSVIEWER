@@ -24,15 +24,16 @@ namespace HSVIEWER.Controllers
         }
 
         // GET: StagesAnalysis
-        public async Task<IActionResult> Index(string Id, string pipelineId)
+        public async Task<IActionResult> Index(string Id)
         {
-            var isProcessed = await _context.StagesAnalysis.Where(w=>w.Stagename==Id).SingleOrDefaultAsync();
+            var isProcessed = await _context.StagesAnalysis.Where(w=>w.PipelineId==Id).SingleOrDefaultAsync();
+
             if (isProcessed.StagesAnalysisId!=0) {
                 return View(await _context.StagesAnalysis.ToListAsync());
             }
             else
             {
-                await _mainService.SaveStageAnalysis(pipelineId);
+                await _mainService.SaveStageAnalysis(Id);
             }
             return View(await _context.StagesAnalysis.ToListAsync());
 
