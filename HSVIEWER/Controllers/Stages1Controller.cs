@@ -14,42 +14,34 @@ namespace HSVIEWER.Controllers
     public class Stages1Controller : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly MainService _mainService;
+        private readonly IMainService _mainService;
 
-        public Stages1Controller(ApplicationDbContext context, MainService mainService)
+        public Stages1Controller(ApplicationDbContext context, IMainService mainService)
         {
             _context = context;
             _mainService = mainService;
         }
 
         // GET: Stages1
-        public async Task<IActionResult> Index(Int32 WId, string pipe = "1703125")
+        public async Task<IActionResult> Index(Int32 WId, string pipe, int workOrderId)
         {
-          
-            await _mainService.SaveStageAnalysis(pipe);
-
-
-
-            var allOwners = await _context.HsOwners.Where(w => w.WorkOrderId == 7).ToListAsync();
-
-            foreach (var item in allOwners)
+            pipe = "1703125";
+            try
             {
-                var deals = await _context.Deals.Where(w => w.HsOwnerId == item.HsId).ToListAsync();
-                var totalDeals = deals.Count();
-                var suma = deals.Sum(x => float.Parse(x.Amount));
-                var average = 0.0;
-                if (totalDeals==0 || suma==0) {
-                     average = suma / totalDeals;
-                }
-                else
-                {
-                    average = 0;
-                }
-                
-                
-               _context.OwnerAnalysis.Add(new OwnerAnalysis { DealsNumber = totalDeals, OwnerPipelineValue = suma, DealAverage = average, OwnerName = item.Name });
-                await _context.SaveChangesAsync();
+                await _mainService.SaveStageAnalysis(pipe);
+
+                await _mainService.SaveOwnerAnalysis(workOrderId);
+
+                return Ok();
             }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
+
+            
 
             return RedirectToAction("Index", "Onwneranalysis"); 
         }

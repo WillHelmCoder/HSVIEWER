@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HSVIEWER.Services
 {
-    public class MainService
+    public class MainService:IMainService
     {
         protected ApplicationDbContext _context;
         public MainService(ApplicationDbContext context)
