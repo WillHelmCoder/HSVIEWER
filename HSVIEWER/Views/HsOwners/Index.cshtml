@@ -39,7 +39,8 @@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.HsOwnerId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.HsOwnerId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.HsOwnerId">Delete</a>
+                <a asp-action="Delete" asp-route-id="@item.HsOwnerId">Delete</a>|
+                <a asp-controller="Stages1" asp-action="index" asp-route-id="@item.HsOwnerId">Owner Analisis</a>
             </td>
         </tr>
 }

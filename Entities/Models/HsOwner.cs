@@ -10,6 +10,7 @@ namespace Entities.Models
         public Int32 HsOwnerId { get; set; }
         public string eMail { get; set; }
         public string Name { get; set; }
-        public string WorkOrderId { get; set; }
+        public Int32 WorkOrderId { get; set; }
+        public string HsId { get; set; }
     }
 }

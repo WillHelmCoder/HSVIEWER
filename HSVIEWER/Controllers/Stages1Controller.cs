@@ -25,10 +25,33 @@ namespace HSVIEWER.Controllers
         // GET: Stages1
         public async Task<IActionResult> Index(Int32 WId, string pipe = "1703125")
         {
-           
+          
             await _mainService.SaveStageAnalysis(pipe);
 
-            return RedirectToAction("Index", "StageAnalysis"); 
+
+
+            var allOwners = await _context.HsOwners.Where(w => w.WorkOrderId == 7).ToListAsync();
+
+            foreach (var item in allOwners)
+            {
+                var deals = await _context.Deals.Where(w => w.HsOwnerId == item.HsId).ToListAsync();
+                var totalDeals = deals.Count();
+                var suma = deals.Sum(x => float.Parse(x.Amount));
+                var average = 0.0;
+                if (totalDeals==0 || suma==0) {
+                     average = suma / totalDeals;
+                }
+                else
+                {
+                    average = 0;
+                }
+                
+                
+               _context.OwnerAnalysis.Add(new OwnerAnalysis { DealsNumber = totalDeals, OwnerPipelineValue = suma, DealAverage = average, OwnerName = item.Name });
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Index", "Onwneranalysis"); 
         }
 
         // GET: Stages1/Details/5
