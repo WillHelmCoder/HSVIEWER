@@ -11,34 +11,37 @@ using HSVIEWER.Services;
 
 namespace HSVIEWER.Controllers
 {
-    public class StagesAnalysisController : Controller
+    public class OwnerStageAnalysisController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly IMainService _mainService;
 
-        public StagesAnalysisController(ApplicationDbContext context, IMainService mainService)
+        public OwnerStageAnalysisController(ApplicationDbContext context, IMainService mainService)
         {
             _context = context;
             _mainService = mainService;
         }
 
-        // GET: StagesAnalysis
-        public async Task<IActionResult> Index(string Id, Int32 wid)
+        // GET: OwnerStageAnalysis
+        public async Task<IActionResult> Index(string pipe, string owner, Int32 wid)
         {
-            Int32 isProcessed = await _context.StagesAnalysis.Where(w => w.PipelineId == Id).CountAsync();
+            var ownerName = _context.HsOwners.Where(w=>w.eMail==owner).FirstOrDefault().Name;
+            Int32 isProcessed = await _context.OwnerStageAnalysis.Where(w => w.OwnerMail == owner).Where(w => w.PipeLineId == pipe).CountAsync();
 
-            if (isProcessed!=0) {
-                return View(await _context.StagesAnalysis.ToListAsync());
+            if (isProcessed != 0)
+            {
+                return View(await _context.OwnerStageAnalysis.Where(x => x.OwnerMail == owner).Where(w=>w.PipeLineId==pipe).ToListAsync());
             }
             else
             {
-                await _mainService.SaveStageAnalysis(Id, wid);
+                await _mainService.SaveStageOwnerAnalysis(pipe, owner, wid); ;
             }
-            return View(await _context.StagesAnalysis.ToListAsync());
+          
 
+            return View(await _context.OwnerStageAnalysis.Where(x=>x.OwnerMail == owner).Where(w => w.PipeLineId == pipe).ToListAsync());
         }
 
-        // GET: StagesAnalysis/Details/5
+        // GET: OwnerStageAnalysis/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -46,39 +49,39 @@ namespace HSVIEWER.Controllers
                 return NotFound();
             }
 
-            var stagesAnalysis = await _context.StagesAnalysis
-                .FirstOrDefaultAsync(m => m.StagesAnalysisId == id);
-            if (stagesAnalysis == null)
+            var ownerStageAnalysis = await _context.OwnerStageAnalysis
+                .FirstOrDefaultAsync(m => m.OwnerStageAnalysisId == id);
+            if (ownerStageAnalysis == null)
             {
                 return NotFound();
             }
 
-            return View(stagesAnalysis);
+            return View(ownerStageAnalysis);
         }
 
-        // GET: StagesAnalysis/Create
+        // GET: OwnerStageAnalysis/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: StagesAnalysis/Create
+        // POST: OwnerStageAnalysis/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("StagesAnalysisId,Stagename,DealsNumber,DealAverage,StageValue")] StagesAnalysis stagesAnalysis)
+        public async Task<IActionResult> Create([Bind("OwnerStageAnalysisId,OwnerName,StageName,PipeLineId,DealsNumber,DealAverage,StageValue")] OwnerStageAnalysis ownerStageAnalysis)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(stagesAnalysis);
+                _context.Add(ownerStageAnalysis);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(stagesAnalysis);
+            return View(ownerStageAnalysis);
         }
 
-        // GET: StagesAnalysis/Edit/5
+        // GET: OwnerStageAnalysis/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -86,22 +89,22 @@ namespace HSVIEWER.Controllers
                 return NotFound();
             }
 
-            var stagesAnalysis = await _context.StagesAnalysis.FindAsync(id);
-            if (stagesAnalysis == null)
+            var ownerStageAnalysis = await _context.OwnerStageAnalysis.FindAsync(id);
+            if (ownerStageAnalysis == null)
             {
                 return NotFound();
             }
-            return View(stagesAnalysis);
+            return View(ownerStageAnalysis);
         }
 
-        // POST: StagesAnalysis/Edit/5
+        // POST: OwnerStageAnalysis/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("StagesAnalysisId,Stagename,DealsNumber,DealAverage,StageValue")] StagesAnalysis stagesAnalysis)
+        public async Task<IActionResult> Edit(int id, [Bind("OwnerStageAnalysisId,OwnerName,StageName,PipeLineId,DealsNumber,DealAverage,StageValue")] OwnerStageAnalysis ownerStageAnalysis)
         {
-            if (id != stagesAnalysis.StagesAnalysisId)
+            if (id != ownerStageAnalysis.OwnerStageAnalysisId)
             {
                 return NotFound();
             }
@@ -110,12 +113,12 @@ namespace HSVIEWER.Controllers
             {
                 try
                 {
-                    _context.Update(stagesAnalysis);
+                    _context.Update(ownerStageAnalysis);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!StagesAnalysisExists(stagesAnalysis.StagesAnalysisId))
+                    if (!OwnerStageAnalysisExists(ownerStageAnalysis.OwnerStageAnalysisId))
                     {
                         return NotFound();
                     }
@@ -126,10 +129,10 @@ namespace HSVIEWER.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(stagesAnalysis);
+            return View(ownerStageAnalysis);
         }
 
-        // GET: StagesAnalysis/Delete/5
+        // GET: OwnerStageAnalysis/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -137,30 +140,30 @@ namespace HSVIEWER.Controllers
                 return NotFound();
             }
 
-            var stagesAnalysis = await _context.StagesAnalysis
-                .FirstOrDefaultAsync(m => m.StagesAnalysisId == id);
-            if (stagesAnalysis == null)
+            var ownerStageAnalysis = await _context.OwnerStageAnalysis
+                .FirstOrDefaultAsync(m => m.OwnerStageAnalysisId == id);
+            if (ownerStageAnalysis == null)
             {
                 return NotFound();
             }
 
-            return View(stagesAnalysis);
+            return View(ownerStageAnalysis);
         }
 
-        // POST: StagesAnalysis/Delete/5
+        // POST: OwnerStageAnalysis/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var stagesAnalysis = await _context.StagesAnalysis.FindAsync(id);
-            _context.StagesAnalysis.Remove(stagesAnalysis);
+            var ownerStageAnalysis = await _context.OwnerStageAnalysis.FindAsync(id);
+            _context.OwnerStageAnalysis.Remove(ownerStageAnalysis);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool StagesAnalysisExists(int id)
+        private bool OwnerStageAnalysisExists(int id)
         {
-            return _context.StagesAnalysis.Any(e => e.StagesAnalysisId == id);
+            return _context.OwnerStageAnalysis.Any(e => e.OwnerStageAnalysisId == id);
         }
     }
 }

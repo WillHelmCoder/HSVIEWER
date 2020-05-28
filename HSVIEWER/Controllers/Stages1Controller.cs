@@ -28,7 +28,7 @@ namespace HSVIEWER.Controllers
             pipe = "1703125";
             try
             {
-                await _mainService.SaveStageAnalysis(pipe);
+                await _mainService.SaveStageAnalysis(pipe,workOrderId);
 
                 await _mainService.SaveOwnerAnalysis(workOrderId);
 

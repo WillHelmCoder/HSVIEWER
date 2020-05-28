@@ -18,11 +18,11 @@ namespace HSVIEWER.Controllers
                         _mainService = mainService;
         }
         // GET: asyncfn
-        public async Task<bool> StageAnalyzeAsync(string Id)
+        public async Task<bool> StageAnalyzeAsync(string Id, Int32 wid)
         {
             try
             {
-                await _mainService.SaveStageAnalysis(Id);
+                await _mainService.SaveStageAnalysis(Id,wid);
                 return true;
             }
             catch (Exception e) { 

@@ -20,8 +20,9 @@ namespace HSVIEWER.Controllers
         }
 
         // GET: HsOwners
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string Id)
         {
+            ViewData["pipe"]  = Id;
             return View(await _context.HsOwners.ToListAsync());
         }
 

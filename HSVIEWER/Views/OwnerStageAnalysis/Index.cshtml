@@ -1,0 +1,65 @@
+﻿@model IEnumerable<Entities.Models.OwnerStageAnalysis>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.OwnerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StageName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PipeLineId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DealsNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DealAverage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StageValue)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.OwnerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StageName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PipeLineId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DealsNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DealAverage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StageValue)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.OwnerStageAnalysisId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.OwnerStageAnalysisId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.OwnerStageAnalysisId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

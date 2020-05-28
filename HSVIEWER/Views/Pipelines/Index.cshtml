@@ -41,7 +41,9 @@
                     <a asp-action="Edit" asp-route-id="@item.PipelineId">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.PipelineId">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.PipelineId">Delete</a>|
-                    <a asp-controller="StagesAnalysis" asp-action="Index" asp-route-id="@item.HsPipeLineId" id="Analize">Analyze</a>
+                    <a asp-controller="StagesAnalysis" asp-action="Index" asp-route-id="@item.HsPipeLineId" asp-route-wid="@item.WorkOrderId">Analyze stages</a>
+                    <a asp-controller="Hsowners" asp-action="Index" asp-route-id="@item.HsPipeLineId">Analyze owners</a>
+
                 </td>
             </tr>
         }
