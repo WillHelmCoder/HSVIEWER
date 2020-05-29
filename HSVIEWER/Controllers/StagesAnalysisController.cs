@@ -25,6 +25,12 @@ namespace HSVIEWER.Controllers
         // GET: StagesAnalysis
         public async Task<IActionResult> Index(string Id, Int32 wid)
         {
+            
+            if (await _mainService.CheckIsProcessing() == true)
+            {
+                return Redirect("/home/processing");
+            }
+
             Int32 isProcessed = await _context.StagesAnalysis.Where(w => w.PipelineId == Id).CountAsync();
 
             if (isProcessed!=0) {

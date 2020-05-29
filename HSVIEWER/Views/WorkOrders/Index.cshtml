@@ -4,39 +4,54 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.WorkOrderDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Owner)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.WorkOrderDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Owner.OwnerId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.WorkOrderId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.WorkOrderId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.WorkOrderId">Delete</a>|
-                <a asp-controller="Pipelines" asp-action="index" asp-route-id="@item.WorkOrderId">Pipelines</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="margin-top ">
+    <div class="container">
+        <div class="row ">
+            <div class="col-6 text-left">
+
+                <h1 class="text-left">Workorders</h1>
+                <p class="text-left">Each time we get the data from hubspot it's like we take a picture of your KPIs. </p>
+                <p class="text-left">This process can take a while depending how many cases or pipelines you have in your HS account. However, this process is automated and we trigger it by night when you sleep so, in the morning you can see the results with your coffee.</p>
+                <p class="text-left">But you can trigger a new update any time.</p>
+                <a asp-controller="SelectPipeline" asp-action="index" asp-route-id="1" class="btn btn-success text-left">Go to main dashboard</a>
+                <a asp-action="Create" class="btn btn-danger text-left">Start a new analysis</a>
+            </div>
+            <div class="col-6">
+                <p class="text-left">
+                   
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Workorders history
+                            </th>
+
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="font-weight-bold"> @item.WorkOrderDate.ToShortDateString()</span> <span> @item.WorkOrderDate.ToShortTimeString()</span>
+                                </td>
+
+                                <td class="text-right">
+
+                                 
+                                    <a asp-controller="Pipelines" asp-action="index" asp-route-id="@item.WorkOrderId">My pipelines</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+
+    </div>
+</div>

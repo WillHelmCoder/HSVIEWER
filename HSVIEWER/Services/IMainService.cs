@@ -14,8 +14,10 @@ namespace HSVIEWER.Services
         Task SaveStageAnalysis(string pipe, Int32 wid);
         Task SaveOwnerAnalysis(int workOrderId);
         Task SaveStageOwnerAnalysis(string pipe, string owner, Int32 wid);
+        Task <bool> CheckIsProcessing();
 
 
-     
+
+
     }
 }

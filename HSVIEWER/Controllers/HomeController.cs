@@ -15,6 +15,12 @@ namespace HSVIEWER.Controllers
             return View();
         }
 
+
+        public IActionResult Processing()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();

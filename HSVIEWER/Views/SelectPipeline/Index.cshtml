@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Entities.Models.Pipeline>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<div class="margin-top ">
+    <div class="container">
+        <div class="row ">
+            <div class="col-12 text-left">
+
+                <h1>Pipelines to dashboard</h1>
+
+                <p>
+                    <a asp-action="Create">Select the Pipeline you want to analyze</a>
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Name)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+
+                                <td>
+                                    <a asp-controller="dashboard" asp-action="index" asp-route-id="@item.PipelineId">Dashboard</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

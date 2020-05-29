@@ -4,50 +4,52 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HsPipeLineId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.WorkOrder)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.HsPipeLineId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.WorkOrder.WorkOrderId)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.PipelineId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.PipelineId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.PipelineId">Delete</a>|
-                    <a asp-controller="StagesAnalysis" asp-action="Index" asp-route-id="@item.HsPipeLineId" asp-route-wid="@item.WorkOrderId">Analyze stages</a>
-                    <a asp-controller="Hsowners" asp-action="Index" asp-route-id="@item.HsPipeLineId">Analyze owners</a>
+<div class="margin-top ">
+    <div class="container">
+        <div class="row ">
+            <div class="col-6 text-left">
 
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                <h1 class="text-left">Pipelines</h1>
+                <p class="text-left">You are looking all the pipelines in your hubspot. </p>
+                <p class="text-left">Stages analysis show you a quick view of the evolution of your pipeline.</p>
+                <p class="text-left">Owners analysis show you the performance of you team.</p>
+
+            </div>
+            <div class="col-6">          
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                               Pipeline name
+                            </th>                          
+                        
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>                               
+                            
+                                <td class="text-right">                                
+                                    <a asp-controller="StagesAnalysis" asp-action="Index" asp-route-id="@item.HsPipeLineId" asp-route-wid="@item.WorkOrderId">Analyze stages</a> |
+                                    <a asp-controller="Hsowners" asp-action="Index" asp-route-id="@item.HsPipeLineId">Analyze owners</a>
+
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
 
 
+            </div>
+        </div>
+
+
+    </div>
+</div>

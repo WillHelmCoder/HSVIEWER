@@ -11,29 +11,29 @@ using HSVIEWER.Services;
 
 namespace HSVIEWER.Controllers
 {
-    public class PipelinesController : Controller
+    public class SelectPipelineController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly IMainService _mainService;
 
-        public PipelinesController(ApplicationDbContext context, IMainService mainService)
+        public SelectPipelineController(ApplicationDbContext context, IMainService mainService)
         {
             _context = context;
             _mainService = mainService;
         }
 
-        // GET: Pipelines
+        // GET: SelectPipeline
         public async Task<IActionResult> Index(Int32 id)
         {
             if (await _mainService.CheckIsProcessing() == true)
             {
                 return Redirect("/home/processing");
             }
-            var applicationDbContext = _context.Pipelines.Where(w => w.WorkOrderId == id).Include(p => p.WorkOrder);
+            var applicationDbContext = _context.Pipelines.Include(p => p.WorkOrder).Where(w=>w.WorkOrder.OwnerId==id);
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Pipelines/Details/5
+        // GET: SelectPipeline/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -52,14 +52,14 @@ namespace HSVIEWER.Controllers
             return View(pipeline);
         }
 
-        // GET: Pipelines/Create
+        // GET: SelectPipeline/Create
         public IActionResult Create()
         {
             ViewData["WorkOrderId"] = new SelectList(_context.WorkOrder, "WorkOrderId", "WorkOrderId");
             return View();
         }
 
-        // POST: Pipelines/Create
+        // POST: SelectPipeline/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -76,7 +76,7 @@ namespace HSVIEWER.Controllers
             return View(pipeline);
         }
 
-        // GET: Pipelines/Edit/5
+        // GET: SelectPipeline/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -93,7 +93,7 @@ namespace HSVIEWER.Controllers
             return View(pipeline);
         }
 
-        // POST: Pipelines/Edit/5
+        // POST: SelectPipeline/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -129,7 +129,7 @@ namespace HSVIEWER.Controllers
             return View(pipeline);
         }
 
-        // GET: Pipelines/Delete/5
+        // GET: SelectPipeline/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -148,7 +148,7 @@ namespace HSVIEWER.Controllers
             return View(pipeline);
         }
 
-        // POST: Pipelines/Delete/5
+        // POST: SelectPipeline/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

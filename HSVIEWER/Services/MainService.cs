@@ -26,7 +26,16 @@ namespace HSVIEWER.Services
                 var deals = await GetDealsInStage(item.HsStageId, wid);
                 var totalDeals = deals.Count();
                 long suma = deals.Sum(x => long.Parse(x.Amount));
-                var average = suma / totalDeals;
+                
+                var average = 0.0;
+                if (totalDeals != 0 && suma != 0)
+                {
+                    average = suma / totalDeals;
+                }
+                else
+                {
+                    average = 0;
+                }
 
                 var newStageAnalysis = new StagesAnalysis { DealsNumber = totalDeals, StageValue = suma, DealAverage = average, Stagename = item.StageName, PipelineId=pipe };
                 model.Add(newStageAnalysis);
@@ -67,6 +76,22 @@ namespace HSVIEWER.Services
             return await _context.HsOwners.Where(w => w.WorkOrderId == workOrderId).ToListAsync();
         }
 
+
+        public async Task <bool> CheckIsProcessing()
+        {
+            var x= await _context.Owners.Where(w => w.OwnerId == 1).SingleOrDefaultAsync();
+            if (x.Isprocessing == true)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+            
+        }
+
+
         public async Task SaveOwnerAnalysis(int wid) {
             var allOwners = await GetOwnersWorkOrder(wid);
             var listToInsert = new List<OwnerAnalysis>();
@@ -76,7 +101,7 @@ namespace HSVIEWER.Services
                 var totalDeals = deals.Count();
                 var suma = deals.Sum(x => float.Parse(x.Amount));
                 var average = 0.0;
-                if (totalDeals == 0 || suma == 0)
+                if (totalDeals != 0 || suma != 0)
                 {
                     average = suma / totalDeals;
                 }
