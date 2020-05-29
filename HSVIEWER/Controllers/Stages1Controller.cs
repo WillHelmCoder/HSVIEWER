@@ -41,9 +41,16 @@ namespace HSVIEWER.Controllers
             }
         }
 
-        public async Task<IActionResult> GetGraphInfo()
+        public async Task<IActionResult> ShowGraph()
         {
-            var wo = _mainService.GetAllWorkOrders();
+            var wos = await _mainService.GetAllWorkOrders();
+            
+            foreach(var woitem in wos)
+            {
+
+            }
+
+            return View();
         }
 
         // GET: Stages1/Details/5

@@ -88,6 +88,12 @@ namespace HSVIEWER.Services
             return await _context.HsOwners.Where(w => w.WorkOrderId == workOrderId).ToListAsync();
         }
 
+        public async Task<List<OwnerStageAnalysis>> GetAllOwnerStageAnalysis()
+        {
+            var model = await _context.OwnerStageAnalysis.ToListAsync();
+            return model;
+        }
+
         
 
         

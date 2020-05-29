@@ -13,6 +13,7 @@ namespace HSVIEWER.Services
         Task SaveStageAnalysis(string pipe);
         Task SaveOwnerAnalysis(int workOrderId);
         Task<List<WorkOrder>> GetAllWorkOrders();
+        Task<List<OwnerStageAnalysis>> GetAllOwnerStageAnalysis()
 
 
 
