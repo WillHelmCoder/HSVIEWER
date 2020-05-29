@@ -7,21 +7,42 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Entities.Models;
 using HSVIEWER.Data;
+using HSVIEWER.Services;
 
 namespace HSVIEWER.Controllers
 {
     public class OwnerAnalysisController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMainService _mainService;
 
-        public OwnerAnalysisController(ApplicationDbContext context)
+        public OwnerAnalysisController(ApplicationDbContext context, IMainService mainService)
         {
             _context = context;
+            _mainService = mainService;
         }
 
         // GET: OwnerAnalysis
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string Id, Int32 wid)
         {
+            if (await _mainService.CheckIsProcessing() == true)
+            {
+                return Redirect("/home/processing");
+            }
+
+            Int32 isProcessed = await _context.OwnerAnalysis.Where(w => w.OwnerName == Id).CountAsync();
+
+            if (isProcessed != 0)
+            {
+                return View(await _context.OwnerAnalysis.ToListAsync());
+            }
+            else
+            {
+                await _mainService.SaveStageAnalysis(Id, wid);
+            }
+            
+
+
             return View(await _context.OwnerAnalysis.ToListAsync());
         }
 

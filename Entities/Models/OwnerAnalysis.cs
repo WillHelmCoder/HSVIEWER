@@ -12,5 +12,6 @@ namespace Entities.Models
         public Int32 DealsNumber { get; set; }
         public double DealAverage { get; set; }
         public double OwnerPipelineValue { get; set; }
+        public Int32 WorkOrderId { get; set; }
     }
 }

@@ -7,21 +7,29 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Entities.Models;
 using HSVIEWER.Data;
+using HSVIEWER.Services;
 
 namespace HSVIEWER.Controllers
 {
     public class WorkOrdersController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMainService _mainService;
 
-        public WorkOrdersController(ApplicationDbContext context)
+        public WorkOrdersController(ApplicationDbContext context, IMainService mainService)
         {
             _context = context;
+            _mainService = mainService;
         }
 
         // GET: WorkOrders
         public async Task<IActionResult> Index()
         {
+
+            if (await _mainService.CheckIsProcessing() == true)
+            {
+                return Redirect("/home/processing");
+            }
             var applicationDbContext = _context.WorkOrder.Include(w => w.Owner);
             return View(await applicationDbContext.ToListAsync());
         }
@@ -62,10 +70,11 @@ namespace HSVIEWER.Controllers
             if (ModelState.IsValid)
             {
                 workOrder.WorkOrderDate = DateTime.Now;
+                
                 _context.Add(workOrder);
-
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                return Redirect("/home/processing");
             }
             ViewData["OwnerId"] = new SelectList(_context.Owners, "OwnerId", "OwnerId", workOrder.OwnerId);
             return View(workOrder);

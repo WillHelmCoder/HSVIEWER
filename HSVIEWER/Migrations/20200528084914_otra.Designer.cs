@@ -4,14 +4,16 @@ using HSVIEWER.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HSVIEWER.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200528084914_otra")]
+    partial class otra
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -122,9 +124,6 @@ namespace HSVIEWER.Migrations
                     b.Property<double>("OwnerPipelineValue")
                         .HasColumnType("float");
 
-                    b.Property<int>("WorkOrderId")
-                        .HasColumnType("int");
-
                     b.HasKey("OwnerAnalysisId");
 
                     b.ToTable("OwnerAnalysis");
@@ -143,9 +142,6 @@ namespace HSVIEWER.Migrations
                     b.Property<int>("DealsNumber")
                         .HasColumnType("int");
 
-                    b.Property<string>("OwnerMail")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("OwnerName")
                         .HasColumnType("nvarchar(max)");
 
@@ -157,9 +153,6 @@ namespace HSVIEWER.Migrations
 
                     b.Property<double>("StageValue")
                         .HasColumnType("float");
-
-                    b.Property<int>("WorkOrderId")
-                        .HasColumnType("int");
 
                     b.HasKey("OwnerStageAnalysisId");
 

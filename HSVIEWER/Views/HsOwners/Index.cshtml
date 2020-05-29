@@ -40,7 +40,8 @@
                 <a asp-action="Edit" asp-route-id="@item.HsOwnerId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.HsOwnerId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.HsOwnerId">Delete</a>|
-                <a asp-controller="Stages1" asp-action="index" asp-route-id="@item.HsOwnerId">Owner Analisis</a>
+               
+                <a href='/OwnerStageAnalysis/index?pipe=@ViewData["pipe"]&owner=@item.eMail&wid=@item.WorkOrderId'>Analize</a>
             </td>
         </tr>
 }

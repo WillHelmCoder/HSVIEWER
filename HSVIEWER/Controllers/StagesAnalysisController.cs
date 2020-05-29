@@ -18,14 +18,19 @@ namespace HSVIEWER.Controllers
 
         public StagesAnalysisController(ApplicationDbContext context, IMainService mainService)
         {
-
             _context = context;
             _mainService = mainService;
         }
 
         // GET: StagesAnalysis
-        public async Task<IActionResult> Index(string Id)
+        public async Task<IActionResult> Index(string Id, Int32 wid)
         {
+            
+            if (await _mainService.CheckIsProcessing() == true)
+            {
+                return Redirect("/home/processing");
+            }
+
             Int32 isProcessed = await _context.StagesAnalysis.Where(w => w.PipelineId == Id).CountAsync();
 
             if (isProcessed!=0) {
@@ -33,7 +38,7 @@ namespace HSVIEWER.Controllers
             }
             else
             {
-                await _mainService.SaveStageAnalysis(Id);
+                await _mainService.SaveStageAnalysis(Id, wid);
             }
             return View(await _context.StagesAnalysis.ToListAsync());
 

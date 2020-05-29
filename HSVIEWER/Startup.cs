@@ -50,7 +50,8 @@ namespace HSVIEWER
             services.AddRazorPages();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             services.Configure<RazorPagesOptions>(options => options.RootDirectory = "/Views");
-        
+            services.AddControllersWithViews()
+                .AddRazorRuntimeCompilation();
 
 
         }
