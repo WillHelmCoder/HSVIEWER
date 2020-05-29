@@ -76,7 +76,11 @@ namespace HSVIEWER.Services
             return await _context.HsOwners.Where(w => w.WorkOrderId == workOrderId).ToListAsync();
         }
 
-
+        public async Task<List<WorkOrder>> GetWorkOrders()
+        {
+            var model = await _context.WorkOrder.ToListAsync();
+            return model;
+        }
         public async Task<bool> CheckIsProcessing()
         {
             var x = await _context.Owners.Where(w => w.OwnerId == 1).SingleOrDefaultAsync();
@@ -148,6 +152,15 @@ namespace HSVIEWER.Services
 
             await _context.OwnerStageAnalysis.AddRangeAsync(model);
             await _context.SaveChangesAsync();
+        }
+        public async Task<List<OwnerStageAnalysis>> GetOwnerStageAnalysis(int workOrder) {
+            var model = await _context.OwnerStageAnalysis.Where(x => x.WorkOrderId == workOrder).ToListAsync();
+            return model;
+        }
+        public async Task<List<StagesAnalysis>> GetStagesAnalysis(int workOrder)
+        {
+            var model = await _context.StagesAnalysis.Where(x => x.WorkOrderId == workOrder).ToListAsync();
+            return model;
         }
 
     }
