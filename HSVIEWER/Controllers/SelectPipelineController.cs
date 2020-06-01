@@ -29,7 +29,7 @@ namespace HSVIEWER.Controllers
             {
                 return Redirect("/home/processing");
             }
-            var applicationDbContext = _context.Pipelines.Include(p => p.WorkOrder).Where(w=>w.WorkOrder.OwnerId==id);
+            var applicationDbContext = _context.Pipelines.Include(p => p.WorkOrder).Where(w => w.WorkOrder.OwnerId == id).Distinct();
             return View(await applicationDbContext.ToListAsync());
         }
 
