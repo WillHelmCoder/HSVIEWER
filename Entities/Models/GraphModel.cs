@@ -7,8 +7,8 @@ namespace Entities.Models
 {
     public class GraphModel
     {
-        public List<WorkOrderBar> OwnersGrap { get; set; }
-        public List<WorkOrderBar> StagesGrap { get; set; }
+        public List<WorkOrderBar> OwnersGrap { get; set; } = new List<WorkOrderBar>();
+        public List<WorkOrderBar> StagesGrap { get; set; } = new List<WorkOrderBar>();
     }
 
     public class WorkOrderBar {
