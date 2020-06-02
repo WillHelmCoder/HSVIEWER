@@ -52,7 +52,7 @@ namespace HSVIEWER.Controllers
             {
                 var woo = await _mainService.GetWorkOrdersByOwner(owner.OwnerId);
                 var graph = new OwnerGraphModel();
-
+                graph.Name = owner.Email;
                 foreach (var woitem in wo)
                 {
 
@@ -88,7 +88,7 @@ namespace HSVIEWER.Controllers
                 var graph = new WorkOrderBar();
 
                 foreach (var stage in stages) {
-                    if (listGraph.StagesGraph.Any(x => x.Label.Equals(stage)))
+                    if (!listGraph.StagesGraph.Any(x => x.Label.Equals(stage)))
                     {
                         var dataList = new List<int>();
                         dataList.Add(sa.Where(x => x.Stagename.Equals(stage)).Sum(x => x.DealsNumber));

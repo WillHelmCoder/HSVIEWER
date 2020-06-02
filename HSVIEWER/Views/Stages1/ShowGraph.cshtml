@@ -1,20 +1,24 @@
 ﻿@model Entities.Models.MainGraphModel
 @{
     ViewData["Title"] = "ShowGraph";
+    var counter = 0;
 }
-
-<h1>ShowGraph</h1>
 
 <div class="container">
     <!-- Column Chart -->
+    @foreach (var item in Model.OwnersGraphs)
+    {
+        <div class="row">
+            <div class="col-12">
+                <canvas id="client-column-stacked-@counter" height="400"></canvas>
+            </div>
+        </div>
+        counter++;
+    }
+
     <div class="row">
         <div class="col-12">
             <canvas id="column-stacked" height="400"></canvas>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            <canvas id="column-stacked-2" height="400"></canvas>
         </div>
     </div>
 </div>
@@ -34,21 +38,23 @@
         // Column chart
         // ------------------------------
         $(window).on("load", function () {
+            var color = ['#FF6347','#FFEFD5','#CD5C5C','#90EE90','#48D1CC','#87CEFA','#9370DB','#9370DB','#DB7093','#FFF0F5','#778899','#DAA520'];
             var model = '@Html.Raw(Json.Serialize(Model))';
+            var jsonModel = JSON.parse(model);
             var datasets = [];
 
-            $.each(JSON.parse(model), function (key, value) {
+            $.each(jsonModel.stagesGraph, function (key, value) {
                 var set = {
                     label: value.label,
                     data: value.data,
-                    backgroundColor: "#5175E0",
-                    hoverBackgroundColor: "rgba(81,117,224,.8)",
+                    backgroundColor: color[key],
+                    hoverBackgroundColor: color[key],
                     borderColor: "transparent"
                 };
 
                 datasets.push(set);
             });
-            console.log(JSON.parse(model));
+
 
             // Get the context of the Chart canvas element we want to select
             var ctx = $("#column-stacked");
@@ -56,21 +62,30 @@
             // Chart Options
             var chartOptions = {
                 title: {
-                    display: false,
-                    text: "Chart.js Column Chart - Stacked"
+                    display: true,
+                    text: "Deals amount by stage in workorder",
+                    fontColor: 'white',
+                    fontSize: 18,
                 },
                 tooltips: {
                     mode: 'label'
                 },
                 responsive: true,
+                legend: {
+                    labels: {
+                        // This more specific font property overrides the global property
+                        fontColor: 'white'
+                    }
+                },
                 maintainAspectRatio: false,
                 responsiveAnimationDuration: 500,
                 scales: {
                     xAxes: [{
                         stacked: true,
+                        fontColor: "white",
                         display: true,
                         gridLines: {
-                            color: "#f3f3f3",
+                            color: "#fff",
                             drawTicks: false,
                         },
                         scaleLabel: {
@@ -80,8 +95,9 @@
                     yAxes: [{
                         stacked: true,
                         display: true,
+                        fontColor: "white",
                         gridLines: {
-                            color: "#f3f3f3",
+                            color: "#fff",
                             drawTicks: false,
                         },
                         scaleLabel: {
@@ -97,7 +113,7 @@
 
             // Chart Data
             var chartData = {
-                labels: ["January", "February", "March", "April", "May"],
+                labels: ["WorkOrder 1", "WorkOrder 2", "WorkOrder 3", "WorkOrder 4", "WorkOrder 5"],
                 datasets: datasets
             };
 
@@ -113,16 +129,26 @@
             // Create the chart
             var lineChart = new Chart(ctx, config);
 
-            var ctx2 = $("#column-stacked-2");
-
+            $.each(jsonModel.ownersGraphs, function (key, value) {
+                console.log(value)
+                var userctx = $("#client-column-stacked-"+key);
+                console.log(userctx);
             // Chart Options
             var chartOptions2 = {
                 title: {
-                    display: false,
-                    text: "Chart.js Column Chart - Stacked"
+                    display: true,
+                    text: "Deals Amount of " + value.name,
+                    fontColor: 'white',
+                    fontSize: 18,
                 },
                 tooltips: {
                     mode: 'label'
+                },
+                legend: {
+                    labels: {
+                        // This more specific font property overrides the global property
+                        fontColor: 'white'
+                    }
                 },
                 responsive: true,
                 maintainAspectRatio: false,
@@ -132,7 +158,7 @@
                         stacked: true,
                         display: true,
                         gridLines: {
-                            color: "#f3f3f3",
+                            color: "#fff",
                             drawTicks: false,
                         },
                         scaleLabel: {
@@ -143,7 +169,7 @@
                         stacked: true,
                         display: true,
                         gridLines: {
-                            color: "#f3f3f3",
+                            color: "#fff",
                             drawTicks: false,
                         },
                         scaleLabel: {
@@ -153,29 +179,27 @@
                 }
             };
 
+            var usersdatasets = [];
+
+            $.each(value.ownersGrap, function (key, value) {
+                var set = {
+                    label: value.label,
+                    data: value.data,
+                    backgroundColor: color[key],
+                    hoverBackgroundColor: color[key],
+                    borderColor: "transparent"
+                };
+
+                usersdatasets.push(set);
+            });
+
+
+
             // Chart Data
             var chartData2 = {
-                labels: ["January", "February", "March", "April", "May"],
-                datasets: [{
-                    label: "My First dataset",
-                    data: [65, 59, 80, 81, 56],
-                    backgroundColor: "#5175E0",
-                    hoverBackgroundColor: "rgba(81,117,224,.8)",
-                    borderColor: "transparent"
-                }, {
-                    label: "My Second dataset",
-                    data: [28, 48, 40, 19, 86],
-                    backgroundColor: "#28D094",
-                    hoverBackgroundColor: "rgba(22,211,154,.8)",
-                    borderColor: "transparent"
-                },
-                {
-                    label: "My Third dataset",
-                    data: [80, 25, 16, 36, 67],
-                    backgroundColor: "#F98E76",
-                    hoverBackgroundColor: "rgba(249,142,118,.8)",
-                    borderColor: "transparent"
-                }]
+                labels: ["WorkOrder 1", "WorkOrder 2", "WorkOrder 3", "WorkOrder 4", "WorkOrder 5"],
+                fontColor: 'white',
+                datasets: usersdatasets
             };
 
             var config2 = {
@@ -188,7 +212,12 @@
             };
 
             // Create the chart
-            var lineChart2 = new Chart(ctx2, config2);
+            var lineChart2 = new Chart(userctx, config2);
+
+            });
+
+
+
 
         });
     </script>
