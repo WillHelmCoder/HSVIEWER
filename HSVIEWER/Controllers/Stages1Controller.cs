@@ -39,11 +39,39 @@ namespace HSVIEWER.Controllers
 
                 throw;
             }
-            
+        }
 
-            
+        public async Task<IActionResult> ShowGraph()
+        {
+            var wo = await _mainService.GetWorkOrders();
 
-            return RedirectToAction("Index", "Onwneranalysis"); 
+            var graph = new GraphModel();
+            
+            
+            foreach(var woitem in wo)
+            {
+                var osa = await _mainService.GetOwnerStageAnalysis(woitem.WorkOrderId);
+                var groupedosa = osa.GroupBy(x => x.OwnerName).Select(x => new { owner = x.Key, Amount = x.Sum(y => y.DealsNumber) }).ToList();
+
+                
+                graph.OwnersGrap.Add(new WorkOrderBar
+                {
+                    Owners = groupedosa.Select(x => x.owner).ToList(),
+                    Amounts = groupedosa.Select(x => x.Amount).ToList()
+                });
+
+                var sa = await _mainService.GetStagesAnalysis(woitem.WorkOrderId);
+                var groupedsa = sa.GroupBy(x => x.Stagename).Select(x => new { owner = x.Key, Amount = x.Sum(y => y.DealsNumber) }).ToList();
+
+                graph.OwnersGrap.Add(new WorkOrderBar
+                {
+                    Owners = groupedsa.Select(x => x.owner).ToList(),
+                    Amounts = groupedsa.Select(x => x.Amount).ToList()
+                });
+
+            }
+
+            return View(graph);
         }
 
         // GET: Stages1/Details/5
