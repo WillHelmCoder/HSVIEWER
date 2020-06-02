@@ -91,7 +91,7 @@ namespace HSVIEWER.Controllers
                     if (!listGraph.StagesGraph.Any(x => x.Label.Equals(stage)))
                     {
                         var dataList = new List<int>();
-                        dataList.Add(sa.Where(x => x.Stagename.Equals(stage)).Sum(x => x.DealsNumber));
+                        dataList.Add(sa.Where(x => x.Stagename.Equals(stage)).Sum(x => (int)x.DealAverage));
                         listGraph.StagesGraph.Add(new WorkOrderBar
                         {
                             Label = stage,
@@ -99,7 +99,7 @@ namespace HSVIEWER.Controllers
                         });
                     }
                     else { 
-                        listGraph.StagesGraph.SingleOrDefault(x => x.Label.Equals(stage)).Data.Add(sa.Where(x => x.Stagename.Equals(stage)).Sum(x => x.DealsNumber));
+                        listGraph.StagesGraph.SingleOrDefault(x => x.Label.Equals(stage)).Data.Add(sa.Where(x => x.Stagename.Equals(stage)).Sum(x => (int)x.DealAverage));
                     }
                         
                 }
