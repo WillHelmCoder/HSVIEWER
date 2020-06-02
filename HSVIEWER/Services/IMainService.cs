@@ -9,6 +9,7 @@ namespace HSVIEWER.Services
     public interface IMainService
     {
         Task<List<Stage>> GetAllStages(string model);
+        Task<List<Owner>> GetAllOwners();
 
         Task SaveOwnerAnalysis(int workOrderId);
 
@@ -20,8 +21,11 @@ namespace HSVIEWER.Services
         Task <bool> CheckIsProcessing();
 
         Task<List<WorkOrder>> GetWorkOrders();
-        Task<List<OwnerStageAnalysis>> GetOwnerStageAnalysis(int id);
-        Task<List<StagesAnalysis>> GetStagesAnalysis(int workOrder);
+
+        Task<List<WorkOrder>> GetWorkOrdersByOwner(int ownerId);
+        Task<List<OwnerStageAnalysis>> GetOwnerStageAnalysis(int id, string pipelineId);
+
+        Task<List<StagesAnalysis>> GetStagesAnalysis(int workOrder, string pipelineId);
 
     }
 }

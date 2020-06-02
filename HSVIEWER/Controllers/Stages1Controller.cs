@@ -28,7 +28,7 @@ namespace HSVIEWER.Controllers
             pipe = "1703125";
             try
             {
-                await _mainService.SaveStageAnalysis(pipe,workOrderId);
+                await _mainService.SaveStageAnalysis(pipe, workOrderId);
 
                 await _mainService.SaveOwnerAnalysis(workOrderId);
 
@@ -41,37 +41,72 @@ namespace HSVIEWER.Controllers
             }
         }
 
-        public async Task<IActionResult> ShowGraph()
+        public async Task<IActionResult> ShowGraph(string pipelineId)
         {
             var wo = await _mainService.GetWorkOrders();
+            var listGraph = new MainGraphModel();
+            var owners = await _mainService.GetAllOwners();
 
-            var graph = new GraphModel();
-            
-            
-            foreach(var woitem in wo)
+
+            foreach (var owner in owners)
             {
-                var osa = await _mainService.GetOwnerStageAnalysis(woitem.WorkOrderId);
-                var groupedosa = osa.GroupBy(x => x.OwnerName).Select(x => new { owner = x.Key, Amount = x.Sum(y => y.DealsNumber) }).ToList();
+                var woo = await _mainService.GetWorkOrdersByOwner(owner.OwnerId);
+                var graph = new OwnerGraphModel();
 
-                
-                graph.OwnersGrap.Add(new WorkOrderBar
+                foreach (var woitem in wo)
                 {
-                    Owners = groupedosa.Select(x => x.owner).ToList(),
-                    Amounts = groupedosa.Select(x => x.Amount).ToList()
-                });
 
-                var sa = await _mainService.GetStagesAnalysis(woitem.WorkOrderId);
-                var groupedsa = sa.GroupBy(x => x.Stagename).Select(x => new { owner = x.Key, Amount = x.Sum(y => y.DealsNumber) }).ToList();
+                    var osa = await _mainService.GetOwnerStageAnalysis(woitem.WorkOrderId, pipelineId);
+                    var getOwners = osa.Select(x => x.OwnerName).Distinct().ToList();
+                    var stages = osa.Select(x => x.StageName).Distinct().ToList();
 
-                graph.OwnersGrap.Add(new WorkOrderBar
-                {
-                    Owners = groupedsa.Select(x => x.owner).ToList(),
-                    Amounts = groupedsa.Select(x => x.Amount).ToList()
-                });
+                    foreach (var stage in stages)
+                    {
+                        if (!graph.OwnersGrap.Any(x => x.Label.Equals(stage)))
+                        {
+                            var dataList = new List<int>();
+                            dataList.Add(osa.Where(x => x.StageName.Equals(stage)).Sum(x => x.DealsNumber));
+                            graph.OwnersGrap.Add(new WorkOrderBar
+                            {
+                                Label = stage,
+                                Data = dataList
+                            });
+                        }
+                        else
+                        {
+                            graph.OwnersGrap.SingleOrDefault(x => x.Label.Equals(stage)).Data.Add(osa.Where(x => x.StageName.Equals(stage)).Sum(x => x.DealsNumber));
+                        }
+                    }
+                }
 
+                listGraph.OwnersGraphs.Add(graph);
             }
 
-            return View(graph);
+            foreach (var item in wo) {
+                var sa = await _mainService.GetStagesAnalysis(item.WorkOrderId, pipelineId);
+                var stages = sa.Select(x => x.Stagename).Distinct().ToList();
+                var graph = new WorkOrderBar();
+
+                foreach (var stage in stages) {
+                    if (listGraph.StagesGraph.Any(x => x.Label.Equals(stage)))
+                    {
+                        var dataList = new List<int>();
+                        dataList.Add(sa.Where(x => x.Stagename.Equals(stage)).Sum(x => x.DealsNumber));
+                        listGraph.StagesGraph.Add(new WorkOrderBar
+                        {
+                            Label = stage,
+                            Data = dataList
+                        });
+                    }
+                    else { 
+                        listGraph.StagesGraph.SingleOrDefault(x => x.Label.Equals(stage)).Data.Add(sa.Where(x => x.Stagename.Equals(stage)).Sum(x => x.DealsNumber));
+                    }
+                        
+                }
+            }
+
+
+            return View(listGraph);
         }
 
         // GET: Stages1/Details/5

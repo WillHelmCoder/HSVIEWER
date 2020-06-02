@@ -5,14 +5,25 @@ using System.Threading.Tasks;
 
 namespace Entities.Models
 {
-    public class GraphModel
+    public class MainGraphModel
+    {
+        public List<OwnerGraphModel> OwnersGraphs { get; set; } = new List<OwnerGraphModel>();
+        public List<WorkOrderBar> StagesGraph { get; set; } = new List<WorkOrderBar>();
+    }
+    public class OwnerGraphModel
     {
         public List<WorkOrderBar> OwnersGrap { get; set; } = new List<WorkOrderBar>();
-        public List<WorkOrderBar> StagesGrap { get; set; } = new List<WorkOrderBar>();
     }
 
-    public class WorkOrderBar {
-        public List<string> Owners { get; set; }
-        public List<int> Amounts { get;set;}
+    public class WorkOrderBar
+    {
+        public string Label { get; set; }
+        public List<int> Data { get; set; }
+    }
+
+    public class PreWorkOrderBar
+    {
+        public string Label { get; set; }
+        public int Data { get; set; }
     }
 }
