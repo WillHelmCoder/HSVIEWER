@@ -38,7 +38,7 @@
                             
                                 <td class="text-right">                                
                                     <a asp-controller="StagesAnalysis" asp-action="Index" asp-route-id="@item.HsPipeLineId" asp-route-wid="@item.WorkOrderId">Analyze stages</a> |
-                                    <a asp-controller="Hsowners" asp-action="Index" asp-route-id="@item.HsPipeLineId">Analyze owners</a>
+                                    <a asp-controller="Hsowners" asp-action="Index" asp-route-id="@item.HsPipeLineId" asp-route-wid="@item.WorkOrderId">Analyze owners</a>
 
                                 </td>
                             </tr>

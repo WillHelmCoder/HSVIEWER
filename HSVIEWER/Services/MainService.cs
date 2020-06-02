@@ -37,7 +37,7 @@ namespace HSVIEWER.Services
                     average = 0;
                 }
 
-                var newStageAnalysis = new StagesAnalysis { DealsNumber = totalDeals, StageValue = suma, DealAverage = average, Stagename = item.StageName, PipelineId=pipe };
+                var newStageAnalysis = new StagesAnalysis { DealsNumber = totalDeals, StageValue = suma, DealAverage = average, Stagename = item.StageName, PipelineId=pipe, WorkOrderId=wid };
                 model.Add(newStageAnalysis);
                 
             }
