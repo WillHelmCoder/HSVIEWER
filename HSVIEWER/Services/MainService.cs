@@ -19,7 +19,7 @@ namespace HSVIEWER.Services
         public async Task SaveStageAnalysis(string pipe, Int32 wid)
         {
             var model = new List<StagesAnalysis>();
-            var allStages = await GetAllStages(pipe);
+            var allStages = await GetAllStages(pipe, wid);
             
             foreach (var item in allStages)
             {
@@ -46,9 +46,9 @@ namespace HSVIEWER.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<Stage>> GetAllStages(string pipeline)
+        public async Task<List<Stage>> GetAllStages(string pipeline, Int32 wid)
         {
-            return await _context.Stages.Where(x => x.HsPipelineId.Equals(pipeline)).ToListAsync();
+            return await _context.Stages.Where(x => x.HsPipelineId.Equals(pipeline)).Where(w=>w.WorkOrderId==wid).ToListAsync();
         }
 
         public async Task<List<Deal>> GetDealsInStage(string stage, Int32 wid)
@@ -66,9 +66,9 @@ namespace HSVIEWER.Services
             return await _context.Deals.Where(x => x.HsStageId.Equals(stage)).Where(w => w.HsOwnerId == owner).Where(w => w.WorkOrderId == wid).ToListAsync();
         }
 
-        public async Task<List<Deal>> GetDealsInOwner(string owner)
+        public async Task<List<Deal>> GetDealsInOwner(string owner, Int32 wid, string pipe)
         {
-            return await _context.Deals.Where(x => x.HsOwnerId.Equals(owner)).ToListAsync();
+            return await _context.Deals.Where(x => x.HsOwnerId.Equals(owner)).Where(w=>w.WorkOrderId==wid).Where(w=>w.PipeLineId==pipe).ToListAsync();
         }
 
         public async Task<List<HsOwner>> GetOwnersWorkOrder(int workOrderId)
@@ -92,12 +92,12 @@ namespace HSVIEWER.Services
         }
 
 
-        public async Task SaveOwnerAnalysis(int wid) {
+        public async Task SaveOwnerAnalysis(int wid, string pipe) {
             var allOwners = await GetOwnersWorkOrder(wid);
             var listToInsert = new List<OwnerAnalysis>();
             foreach (var item in allOwners)
             {
-                var deals = await GetDealsInOwner(item.HsId);
+                var deals = await GetDealsInOwner(item.HsId,wid,pipe);
                 var totalDeals = deals.Count();
                 var suma = deals.Sum(x => float.Parse(x.Amount));
                 var average = 0.0;
@@ -122,7 +122,7 @@ namespace HSVIEWER.Services
         public async Task SaveStageOwnerAnalysis(string pipe, string owner, Int32 wid)
         {
             var model = new List<OwnerStageAnalysis>();
-            var allStages = await GetAllStages(pipe);
+            var allStages = await GetAllStages(pipe, wid);
 
             foreach (var item in allStages)
             {
