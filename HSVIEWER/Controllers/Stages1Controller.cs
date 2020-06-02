@@ -30,7 +30,7 @@ namespace HSVIEWER.Controllers
             {
                 await _mainService.SaveStageAnalysis(pipe, workOrderId);
 
-                await _mainService.SaveOwnerAnalysis(workOrderId);
+                await _mainService.SaveOwnerAnalysis(workOrderId, pipe);
 
                 return Ok();
             }

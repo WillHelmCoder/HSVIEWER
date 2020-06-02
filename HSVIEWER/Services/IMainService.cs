@@ -11,14 +11,13 @@ namespace HSVIEWER.Services
         Task<List<Stage>> GetAllStages(string model);
         Task<List<Owner>> GetAllOwners();
 
-        Task SaveOwnerAnalysis(int workOrderId);
-
+        Task<List<Stage>> GetAllStages(string pipe, Int32 wid);
         Task<List<Deal>> GetDealsInStage(string stage, Int32 wid);
-        
-        Task SaveStageAnalysis(string pipe, Int32 wid);
 
+        Task SaveStageAnalysis(string pipe, Int32 wid);
+        Task SaveOwnerAnalysis(int workOrderId, string pipe);
         Task SaveStageOwnerAnalysis(string pipe, string owner, Int32 wid);
-        Task <bool> CheckIsProcessing();
+        Task<bool> CheckIsProcessing();
 
         Task<List<WorkOrder>> GetWorkOrders();
 
@@ -26,6 +25,9 @@ namespace HSVIEWER.Services
         Task<List<OwnerStageAnalysis>> GetOwnerStageAnalysis(int id, string pipelineId);
 
         Task<List<StagesAnalysis>> GetStagesAnalysis(int workOrder, string pipelineId);
+
+
+
 
     }
 }
