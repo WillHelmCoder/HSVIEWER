@@ -46,9 +46,18 @@ namespace HSVIEWER.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task<List<Stage>> GetAllStages(string pipeline)
+        {
+            return await _context.Stages.Where(x => x.HsPipelineId.Equals(pipeline)).ToListAsync();
+        }
         public async Task<List<Stage>> GetAllStages(string pipeline, Int32 wid)
         {
             return await _context.Stages.Where(x => x.HsPipelineId.Equals(pipeline)).Where(w=>w.WorkOrderId==wid).ToListAsync();
+        }
+
+        public async Task<List<Owner>> GetAllOwners()
+        {
+            return await _context.Owners.ToListAsync();
         }
 
         public async Task<List<Deal>> GetDealsInStage(string stage, Int32 wid)
@@ -76,6 +85,16 @@ namespace HSVIEWER.Services
             return await _context.HsOwners.Where(w => w.WorkOrderId == workOrderId).ToListAsync();
         }
 
+        public async Task<List<WorkOrder>> GetWorkOrders()
+        {
+            var model = await _context.WorkOrder.ToListAsync();
+            return model;
+        }
+        public async Task<List<WorkOrder>> GetWorkOrdersByOwner(int ownerId)
+        {
+            var model = await _context.WorkOrder.Where(x => x.OwnerId == ownerId).ToListAsync();
+            return model;
+        }
 
         public async Task <bool> CheckIsProcessing()
         {
@@ -147,6 +166,16 @@ namespace HSVIEWER.Services
             await _context.OwnerStageAnalysis.AddRangeAsync(model);
             await _context.SaveChangesAsync();
         }
+        public async Task<List<OwnerStageAnalysis>> GetOwnerStageAnalysis(int workOrder, string pipelineId) {
+            var model = await _context.OwnerStageAnalysis.Where(x => x.WorkOrderId == workOrder && x.PipeLineId == pipelineId).ToListAsync();
+            return model;
+        }
+        public async Task<List<StagesAnalysis>> GetStagesAnalysis(int workOrder, string pipelineId)
+        {
+            var model = await _context.StagesAnalysis.Where(x => x.WorkOrderId == workOrder && x.PipelineId.Equals(pipelineId)).ToListAsync();
+            return model;
+        }
+
 
     }
 }
